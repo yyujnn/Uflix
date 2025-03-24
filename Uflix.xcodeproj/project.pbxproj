@@ -8,26 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71362D89B66200A49099 /* AppDelegate.swift */; };
-		F33B71392D89B66200A49099 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71382D89B66200A49099 /* SceneDelegate.swift */; };
-		F33B713B2D89B66200A49099 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B713A2D89B66200A49099 /* ViewController.swift */; };
-		F33B713E2D89B66200A49099 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F33B713D2D89B66200A49099 /* Base */; };
+		F33B713B2D89B66200A49099 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B713A2D89B66200A49099 /* MainViewController.swift */; };
 		F33B71402D89B66400A49099 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F33B713F2D89B66400A49099 /* Assets.xcassets */; };
 		F33B71432D89B66400A49099 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F33B71422D89B66400A49099 /* Base */; };
 		F33B71812D903DBD00A49099 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71802D903DBD00A49099 /* Movie.swift */; };
 		F33B71832D903DC700A49099 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71822D903DC700A49099 /* Video.swift */; };
+		F33B71A92D919C8D00A49099 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F33B71A82D919C8D00A49099 /* SnapKit */; };
+		F33B71AB2D919CCE00A49099 /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71AA2D919CCE00A49099 /* PosterCell.swift */; };
+		F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71AC2D919D0600A49099 /* YoutubeViewController.swift */; };
+		F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F33B71332D89B66200A49099 /* Uflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F33B71362D89B66200A49099 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F33B71382D89B66200A49099 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		F33B713A2D89B66200A49099 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		F33B713D2D89B66200A49099 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F33B713A2D89B66200A49099 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		F33B713F2D89B66400A49099 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F33B71422D89B66400A49099 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F33B71442D89B66400A49099 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F33B71802D903DBD00A49099 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		F33B71822D903DC700A49099 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		F33B71AA2D919CCE00A49099 /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
+		F33B71AC2D919D0600A49099 /* YoutubeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeViewController.swift; sourceTree = "<group>"; };
+		F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F33B71A92D919C8D00A49099 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,12 +66,9 @@
 			children = (
 				F33B714A2D89B67C00A49099 /* App */,
 				F33B717E2D903D3C00A49099 /* Model */,
-				F33B714D2D89B6A000A49099 /* ViewModel */,
 				F33B717F2D903D5100A49099 /* View */,
+				F33B714D2D89B6A000A49099 /* ViewModel */,
 				F33B71362D89B66200A49099 /* AppDelegate.swift */,
-				F33B71382D89B66200A49099 /* SceneDelegate.swift */,
-				F33B713A2D89B66200A49099 /* ViewController.swift */,
-				F33B713C2D89B66200A49099 /* Main.storyboard */,
 				F33B713F2D89B66400A49099 /* Assets.xcassets */,
 				F33B71412D89B66400A49099 /* LaunchScreen.storyboard */,
 				F33B71442D89B66400A49099 /* Info.plist */,
@@ -101,6 +102,10 @@
 		F33B717F2D903D5100A49099 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F33B713A2D89B66200A49099 /* MainViewController.swift */,
+				F33B71AA2D919CCE00A49099 /* PosterCell.swift */,
+				F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */,
+				F33B71AC2D919D0600A49099 /* YoutubeViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -121,6 +126,9 @@
 			dependencies = (
 			);
 			name = Uflix;
+			packageProductDependencies = (
+				F33B71A82D919C8D00A49099 /* SnapKit */,
+			);
 			productName = Uflix;
 			productReference = F33B71332D89B66200A49099 /* Uflix.app */;
 			productType = "com.apple.product-type.application";
@@ -149,6 +157,9 @@
 				Base,
 			);
 			mainGroup = F33B712A2D89B66200A49099;
+			packageReferences = (
+				F33B71A72D919C8D00A49099 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = F33B71342D89B66200A49099 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -165,7 +176,6 @@
 			files = (
 				F33B71402D89B66400A49099 /* Assets.xcassets in Resources */,
 				F33B71432D89B66400A49099 /* Base in Resources */,
-				F33B713E2D89B66200A49099 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,10 +186,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F33B713B2D89B66200A49099 /* ViewController.swift in Sources */,
+				F33B713B2D89B66200A49099 /* MainViewController.swift in Sources */,
+				F33B71AB2D919CCE00A49099 /* PosterCell.swift in Sources */,
+				F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */,
 				F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */,
+				F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */,
 				F33B71812D903DBD00A49099 /* Movie.swift in Sources */,
-				F33B71392D89B66200A49099 /* SceneDelegate.swift in Sources */,
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -187,14 +199,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		F33B713C2D89B66200A49099 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F33B713D2D89B66200A49099 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		F33B71412D89B66400A49099 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -336,7 +340,6 @@
 				INFOPLIST_FILE = Uflix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -363,7 +366,6 @@
 				INFOPLIST_FILE = Uflix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -401,6 +403,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F33B71A72D919C8D00A49099 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F33B71A82D919C8D00A49099 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F33B71A72D919C8D00A49099 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F33B712B2D89B66200A49099 /* Project object */;
 }
