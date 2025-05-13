@@ -10,6 +10,10 @@ import SnapKit
 
 class MainViewController : UIViewController {
 
+    private var popularMovies = [Movie]()
+    private var topRatedMovies = [Movie]()
+    private var upcomingMovies = [Movie]()
+    
     private let label: UILabel = {
         let label = UILabel()
         label.text = "NETFLIX"
@@ -34,6 +38,27 @@ class MainViewController : UIViewController {
     }
 
     private func createLayout() -> UICollectionViewLayout {
+        
+        // 각 아이템이 각 그룹 내에서 전체 넓이와 전체 높이를 차지. (1.0 = 100%)
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        // 각 그룹 넓이는 화면 넓이의 25% 차지하고, 높이는 넓이의 40%
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.25),
+            heightDimension: .fractionalWidth(0.4)
+        )
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = .init(top: 10, leading: 10, bottom: 20, trailing: 10)
+        
         return UICollectionViewLayout()
     }
     
@@ -60,13 +85,13 @@ class MainViewController : UIViewController {
 
 enum Section: Int, CaseIterable {
     case popularMovies
-    case topRateMovies
+    case topRatedMovies
     case upcomingMovies
     
     var title: String {
         switch self {
         case .popularMovies: return "이 시간 핫한 영화"
-        case .topRateMovies: return "가장 평점이 높은 영화"
+        case .topRatedMovies: return "가장 평점이 높은 영화"
         case .upcomingMovies: return "곧 개봉되는 영화"
         }
     }
@@ -81,11 +106,46 @@ extension MainViewController: UICollectionViewDataSource {
     // indexPath 별로 cell 을 구현
     // tableView 의 cellForRowAt 과 비슷한 역할
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.id, for: indexPath) as? PosterCell else { return UICollectionViewCell() }
+        
+        switch Section(rawValue: indexPath.section) {
+        case .popularMovies:
+            cell.configure(with: popularMovies[indexPath.row])
+        case .topRatedMovies:
+            cell.configure(with: topRatedMovies[indexPath.row])
+        case .upcomingMovies:
+            cell.configure(with: upcomingMovies[indexPath.row])
+        default:
+            return UICollectionViewCell()
+        }
+        
+        return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
+        
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: SectionHeaderView.id,
+            for: indexPath
+        ) as? SectionHeaderView else { return UICollectionReusableView() }
+        
+        let sectionType = Section.allCases[indexPath.section]
+        headerView.configure(with: sectionType.title)
+        return headerView
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        <#code#>
+        switch Section(rawValue: section) {
+        case .popularMovies: return popularMovies.count
+        case .topRatedMovies: return topRatedMovies.count
+        case .upcomingMovies: return upcomingMovies.count
+        default: return 0
+        }
     }
     
 }
