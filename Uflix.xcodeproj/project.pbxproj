@@ -19,6 +19,11 @@
 		F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */; };
 		F3FC48472DD332400040DF9D /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48462DD332400040DF9D /* MainViewModel.swift */; };
 		F3FC484A2DD335B30040DF9D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48492DD335B30040DF9D /* NetworkManager.swift */; };
+		F3FC48512DD473E40040DF9D /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48502DD473E40040DF9D /* RxBlocking */; };
+		F3FC48532DD473E40040DF9D /* RxBlocking-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48522DD473E40040DF9D /* RxBlocking-Dynamic */; };
+		F3FC48552DD473E40040DF9D /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48542DD473E40040DF9D /* RxCocoa */; };
+		F3FC48572DD473E40040DF9D /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48562DD473E40040DF9D /* RxCocoa-Dynamic */; };
+		F3FC48592DD473E40040DF9D /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48582DD473E40040DF9D /* RxRelay */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +48,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3FC48592DD473E40040DF9D /* RxRelay in Frameworks */,
+				F3FC48532DD473E40040DF9D /* RxBlocking-Dynamic in Frameworks */,
+				F3FC48572DD473E40040DF9D /* RxCocoa-Dynamic in Frameworks */,
 				F33B71A92D919C8D00A49099 /* SnapKit in Frameworks */,
+				F3FC48552DD473E40040DF9D /* RxCocoa in Frameworks */,
+				F3FC48512DD473E40040DF9D /* RxBlocking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +162,11 @@
 			name = Uflix;
 			packageProductDependencies = (
 				F33B71A82D919C8D00A49099 /* SnapKit */,
+				F3FC48502DD473E40040DF9D /* RxBlocking */,
+				F3FC48522DD473E40040DF9D /* RxBlocking-Dynamic */,
+				F3FC48542DD473E40040DF9D /* RxCocoa */,
+				F3FC48562DD473E40040DF9D /* RxCocoa-Dynamic */,
+				F3FC48582DD473E40040DF9D /* RxRelay */,
 			);
 			productName = Uflix;
 			productReference = F33B71332D89B66200A49099 /* Uflix.app */;
@@ -183,6 +198,7 @@
 			mainGroup = F33B712A2D89B66200A49099;
 			packageReferences = (
 				F33B71A72D919C8D00A49099 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				F3FC484F2DD473E40040DF9D /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = F33B71342D89B66200A49099 /* Products */;
 			projectDirPath = "";
@@ -440,6 +456,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		F3FC484F2DD473E40040DF9D /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -447,6 +471,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F33B71A72D919C8D00A49099 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		F3FC48502DD473E40040DF9D /* RxBlocking */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3FC484F2DD473E40040DF9D /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxBlocking;
+		};
+		F3FC48522DD473E40040DF9D /* RxBlocking-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3FC484F2DD473E40040DF9D /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = "RxBlocking-Dynamic";
+		};
+		F3FC48542DD473E40040DF9D /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3FC484F2DD473E40040DF9D /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		F3FC48562DD473E40040DF9D /* RxCocoa-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3FC484F2DD473E40040DF9D /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = "RxCocoa-Dynamic";
+		};
+		F3FC48582DD473E40040DF9D /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3FC484F2DD473E40040DF9D /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
