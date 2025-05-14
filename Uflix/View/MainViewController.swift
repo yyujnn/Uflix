@@ -69,8 +69,6 @@ class MainViewController : UIViewController {
                 print("에러 발생: \(error)")
             }).disposed(by: disposeBag)
         
-        
-        
     }
     
 
@@ -94,9 +92,22 @@ class MainViewController : UIViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
         section.contentInsets = .init(top: 10, leading: 10, bottom: 20, trailing: 10)
         
-        return UICollectionViewLayout()
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(44)
+        )
+        
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        
+        return UICollectionViewCompositionalLayout(section: section)
     }
     
     private func configureUI() {
@@ -135,7 +146,7 @@ enum Section: Int, CaseIterable {
 }
 
 extension MainViewController: UICollectionViewDelegate {
-    
+    // collectionView 클릭
 }
 
 extension MainViewController: UICollectionViewDataSource {
@@ -185,5 +196,9 @@ extension MainViewController: UICollectionViewDataSource {
         }
     }
     
+    // collectionView 의 섹션이 몇 개인지를 설정하는 메서드.
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return Section.allCases.count
+    }
 }
 
