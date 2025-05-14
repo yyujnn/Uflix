@@ -7,9 +7,12 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 class MainViewController : UIViewController {
 
+    private let viewModel = MainViewModel()
+    private let disposeBag = DisposeBag()
     private var popularMovies = [Movie]()
     private var topRatedMovies = [Movie]()
     private var upcomingMovies = [Movie]()
@@ -34,8 +37,42 @@ class MainViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        bind()
+        configureUI()
     }
+    
+    private func bind() {
+        viewModel.popularMovieSubject
+            .observe(on: MainScheduler.instance) // UI 메인스레드 작업
+            .subscribe(onNext: { [weak self] movies in
+                self?.popularMovies = movies
+                self?.collectionView.reloadData()
+            }, onError: { error in
+                print("에러 발생: \(error)")
+            }).disposed(by: disposeBag)
+        
+        viewModel.topRatedMovieSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] movies in
+                self?.topRatedMovies = movies
+                self?.collectionView.reloadData()
+            }, onError: { error in
+                print("에러 발생: \(error)")
+            }).disposed(by: disposeBag)
+        
+        viewModel.upcomingMovieSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] movies in
+                self?.upcomingMovies = movies
+                self?.collectionView.reloadData()
+            }, onError: { error in
+                print("에러 발생: \(error)")
+            }).disposed(by: disposeBag)
+        
+        
+        
+    }
+    
 
     private func createLayout() -> UICollectionViewLayout {
         
