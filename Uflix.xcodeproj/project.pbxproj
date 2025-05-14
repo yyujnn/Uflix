@@ -17,6 +17,8 @@
 		F33B71AB2D919CCE00A49099 /* PosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71AA2D919CCE00A49099 /* PosterCell.swift */; };
 		F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71AC2D919D0600A49099 /* YoutubeViewController.swift */; };
 		F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */; };
+		F3FC48472DD332400040DF9D /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48462DD332400040DF9D /* MainViewModel.swift */; };
+		F3FC484A2DD335B30040DF9D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48492DD335B30040DF9D /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 		F33B71AA2D919CCE00A49099 /* PosterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterCell.swift; sourceTree = "<group>"; };
 		F33B71AC2D919D0600A49099 /* YoutubeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeViewController.swift; sourceTree = "<group>"; };
 		F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
+		F3FC48462DD332400040DF9D /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		F3FC48492DD335B30040DF9D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +68,7 @@
 		F33B71352D89B66200A49099 /* Uflix */ = {
 			isa = PBXGroup;
 			children = (
+				F3FC48482DD3359C0040DF9D /* Common */,
 				F33B714A2D89B67C00A49099 /* App */,
 				F33B717E2D903D3C00A49099 /* Model */,
 				F33B717F2D903D5100A49099 /* View */,
@@ -86,6 +91,7 @@
 		F33B714D2D89B6A000A49099 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				F3FC48462DD332400040DF9D /* MainViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -108,6 +114,14 @@
 				F33B71AC2D919D0600A49099 /* YoutubeViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		F3FC48482DD3359C0040DF9D /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				F3FC48492DD335B30040DF9D /* NetworkManager.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,6 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3FC484A2DD335B30040DF9D /* NetworkManager.swift in Sources */,
 				F33B713B2D89B66200A49099 /* MainViewController.swift in Sources */,
 				F33B71AB2D919CCE00A49099 /* PosterCell.swift in Sources */,
 				F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */,
@@ -193,6 +208,7 @@
 				F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */,
 				F33B71812D903DBD00A49099 /* Movie.swift in Sources */,
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,
+				F3FC48472DD332400040DF9D /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
