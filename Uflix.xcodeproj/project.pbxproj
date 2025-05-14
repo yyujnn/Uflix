@@ -35,6 +35,7 @@
 		F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		F3FC48462DD332400040DF9D /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F3FC48492DD335B30040DF9D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		F3FC484D2DD46A390040DF9D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +53,7 @@
 		F33B712A2D89B66200A49099 = {
 			isa = PBXGroup;
 			children = (
+				F3FC484E2DD471070040DF9D /* Config */,
 				F33B71352D89B66200A49099 /* Uflix */,
 				F33B71342D89B66200A49099 /* Products */,
 			);
@@ -122,6 +124,14 @@
 				F3FC48492DD335B30040DF9D /* NetworkManager.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		F3FC484E2DD471070040DF9D /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				F3FC484D2DD46A390040DF9D /* Config.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -347,6 +357,7 @@
 		};
 		F33B71482D89B66400A49099 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3FC484D2DD46A390040DF9D /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
