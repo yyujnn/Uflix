@@ -12,7 +12,7 @@ struct VideoResponse: Codable {
 }
 
 struct Video: Codable {
-    let key: String
-    let site: String
-    let type: String
+    let key: String?
+    let site: String?
+    let type: String?
 }
