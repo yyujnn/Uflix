@@ -8,6 +8,8 @@
 import UIKit
 import SnapKit
 import RxSwift
+import AVKit
+import AVFoundation
 
 class MainViewController : UIViewController {
 
@@ -128,7 +130,22 @@ class MainViewController : UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
-
+    
+    private func playVideoUrl() {
+        // url 을 인자로 받지만, 유튜브 url 은 정책상 바로 재생할 수 없으므로
+        // 임의로 url 넣어서 동영상 재생 구현 연습
+        let url = URL(string: "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4")!
+        
+        let player = AVPlayer(url: url)
+        
+        let playerViewController = AVPlayerViewController()
+        
+        playerViewController.player = player
+        
+        present(playerViewController, animated: true) {
+            player.play()
+        }
+    }
 }
 
 enum Section: Int, CaseIterable {
@@ -147,6 +164,36 @@ enum Section: Int, CaseIterable {
 
 extension MainViewController: UICollectionViewDelegate {
     // collectionView 클릭
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch Section(rawValue: indexPath.section) {
+        case .popularMovies:
+            viewModel.fetchTrailerKey(movie: popularMovies[indexPath.row])
+                .observe(on: MainScheduler.instance)
+                .subscribe(onSuccess: { [weak self] key in
+                    self?.playVideoUrl() // 연습용
+                }, onFailure: {error in
+                           print("에러 발생: \(error)")
+                }).disposed(by: disposeBag)
+        case .topRatedMovies:
+            viewModel.fetchTrailerKey(movie: topRatedMovies[indexPath.row])
+                .observe(on: MainScheduler.instance)
+                .subscribe(onSuccess: { [weak self] key in
+                    self?.playVideoUrl() // 연습용
+                }, onFailure: {error in
+                           print("에러 발생: \(error)")
+                }).disposed(by: disposeBag)
+        case .upcomingMovies:
+            viewModel.fetchTrailerKey(movie: upcomingMovies[indexPath.row])
+                .observe(on: MainScheduler.instance)
+                .subscribe(onSuccess: { [weak self] key in
+                    self?.playVideoUrl() // 연습용
+                }, onFailure: {error in
+                           print("에러 발생: \(error)")
+                }).disposed(by: disposeBag)
+        default:
+            return 
+        }
+    }
 }
 
 extension MainViewController: UICollectionViewDataSource {
