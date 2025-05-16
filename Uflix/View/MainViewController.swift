@@ -170,7 +170,7 @@ extension MainViewController: UICollectionViewDelegate {
             viewModel.fetchTrailerKey(movie: popularMovies[indexPath.row])
                 .observe(on: MainScheduler.instance)
                 .subscribe(onSuccess: { [weak self] key in
-                    self?.playVideoUrl() // 연습용
+                    self?.navigationController?.pushViewController(YoutubeViewController(key: key), animated: true)
                 }, onFailure: {error in
                            print("에러 발생: \(error)")
                 }).disposed(by: disposeBag)
@@ -178,7 +178,7 @@ extension MainViewController: UICollectionViewDelegate {
             viewModel.fetchTrailerKey(movie: topRatedMovies[indexPath.row])
                 .observe(on: MainScheduler.instance)
                 .subscribe(onSuccess: { [weak self] key in
-                    self?.playVideoUrl() // 연습용
+                    self?.navigationController?.pushViewController(YoutubeViewController(key: key), animated: true)
                 }, onFailure: {error in
                            print("에러 발생: \(error)")
                 }).disposed(by: disposeBag)
@@ -186,7 +186,7 @@ extension MainViewController: UICollectionViewDelegate {
             viewModel.fetchTrailerKey(movie: upcomingMovies[indexPath.row])
                 .observe(on: MainScheduler.instance)
                 .subscribe(onSuccess: { [weak self] key in
-                    self?.playVideoUrl() // 연습용
+                    self?.navigationController?.pushViewController(YoutubeViewController(key: key), animated: true)
                 }, onFailure: {error in
                            print("에러 발생: \(error)")
                 }).disposed(by: disposeBag)
@@ -233,7 +233,6 @@ extension MainViewController: UICollectionViewDataSource {
         return headerView
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch Section(rawValue: section) {
         case .popularMovies: return popularMovies.count
@@ -243,7 +242,6 @@ extension MainViewController: UICollectionViewDataSource {
         }
     }
     
-    // collectionView 의 섹션이 몇 개인지를 설정하는 메서드.
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return Section.allCases.count
     }

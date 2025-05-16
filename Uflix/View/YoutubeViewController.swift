@@ -6,24 +6,40 @@
 //
 
 import UIKit
+import SnapKit
+import YouTubeiOSPlayerHelper
 
-class YoutubeViewController: UIViewController {
+class YoutubeViewController: UIViewController, YTPlayerViewDelegate {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    // Video key
+    private let key: String
+    private let playerView = YTPlayerView()
+    
+    init(key: String) {
+        self.key = key
+        super.init(nibName: nil, bundle: nil)
+        configureUI()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    */
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureUI()
+        playerView.delegate = self
+        playerView.load(withVideoId: key)
+    }
 
+    private func configureUI() {
+        view.addSubview(playerView)
+        playerView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
+        }
+    }
+    
+    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
+        playerView.playVideo()
+    }
 }
