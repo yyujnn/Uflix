@@ -170,7 +170,9 @@ extension MainViewController: UICollectionViewDelegate {
             viewModel.fetchTrailerKey(movie: popularMovies[indexPath.row])
                 .observe(on: MainScheduler.instance)
                 .subscribe(onSuccess: { [weak self] key in
-                    self?.playVideoUrl() // 연습용
+//                    let url = URL(string: "youtube..\(key)")
+//                    self.palyVideoUrl(url: url) --> 원래였다면!
+                    self?.playVideoUrl() // 연습용 video 재생
                 }, onFailure: {error in
                            print("에러 발생: \(error)")
                 }).disposed(by: disposeBag)

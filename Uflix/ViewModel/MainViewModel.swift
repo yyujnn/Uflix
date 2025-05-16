@@ -84,7 +84,10 @@ class MainViewModel {
             return Single.error(NetworkError.invalidUrl)
         }
         
-        return NetworkManager.shared.fetch(url: url)
+        /// --> flatMap? : Single의 String 타입으로 변환해줌 (싱글 타입 지정해주고 싶을 때 사용 가능하다 ⭐️)
+        /// VideoResponse.results.first: results 중 첫번째 영상 선택
+        /// key를 사용한 유튜브 영상 보기 위해 String Key 반환
+        return NetworkManager.shared.fetch(url: url) // --> 리턴타입: Signle<VideoResponse>
             .flatMap { (VideoResponse: VideoResponse) -> Single<String> in
                 if let trailer = VideoResponse.results.first(where: { $0.type == "Trailer" && $0.site
                     == "YouTube"}) {
