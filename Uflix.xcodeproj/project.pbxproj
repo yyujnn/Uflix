@@ -22,6 +22,8 @@
 		F3FC485C2DD486E40040DF9D /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC485B2DD486E40040DF9D /* RxCocoa */; };
 		F3FC485E2DD486E40040DF9D /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC485D2DD486E40040DF9D /* RxRelay */; };
 		F3FC48612DD5E42D0040DF9D /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48602DD5E42D0040DF9D /* YouTubeiOSPlayerHelper */; };
+		F3FC48632DD9F2A40040DF9D /* MovieDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48622DD9F2A40040DF9D /* MovieDetail.swift */; };
+		F3FC48652DD9F2F20040DF9D /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		F3FC48462DD332400040DF9D /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F3FC48492DD335B30040DF9D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		F3FC484D2DD46A390040DF9D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		F3FC48622DD9F2A40040DF9D /* MovieDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetail.swift; sourceTree = "<group>"; };
+		F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				F3FC48462DD332400040DF9D /* MainViewModel.swift */,
+				F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -109,6 +114,7 @@
 			children = (
 				F33B71802D903DBD00A49099 /* Movie.swift */,
 				F33B71822D903DC700A49099 /* Video.swift */,
+				F3FC48622DD9F2A40040DF9D /* MovieDetail.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -228,7 +234,9 @@
 				F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */,
 				F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */,
 				F33B71812D903DBD00A49099 /* Movie.swift in Sources */,
+				F3FC48632DD9F2A40040DF9D /* MovieDetail.swift in Sources */,
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,
+				F3FC48652DD9F2F20040DF9D /* DetailViewModel.swift in Sources */,
 				F3FC48472DD332400040DF9D /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
