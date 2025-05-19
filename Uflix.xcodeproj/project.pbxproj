@@ -87,10 +87,6 @@
 				F33B717E2D903D3C00A49099 /* Model */,
 				F33B717F2D903D5100A49099 /* View */,
 				F33B714D2D89B6A000A49099 /* ViewModel */,
-				F33B71362D89B66200A49099 /* AppDelegate.swift */,
-				F33B713F2D89B66400A49099 /* Assets.xcassets */,
-				F33B71412D89B66400A49099 /* LaunchScreen.storyboard */,
-				F33B71442D89B66400A49099 /* Info.plist */,
 			);
 			path = Uflix;
 			sourceTree = "<group>";
@@ -98,6 +94,10 @@
 		F33B714A2D89B67C00A49099 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				F33B71362D89B66200A49099 /* AppDelegate.swift */,
+				F33B713F2D89B66400A49099 /* Assets.xcassets */,
+				F33B71412D89B66400A49099 /* LaunchScreen.storyboard */,
+				F33B71442D89B66400A49099 /* Info.plist */,
 			);
 			path = App;
 			sourceTree = "<group>";
