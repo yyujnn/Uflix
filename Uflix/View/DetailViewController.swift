@@ -43,7 +43,6 @@ class DetailViewController: UIViewController {
         viewModel.movieDetail
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] movie in
-                print(movie)
                 self?.configure(movie: movie)
             }).disposed(by: disposeBag)
         
@@ -86,7 +85,14 @@ class DetailViewController: UIViewController {
             $0.left.right.equalToSuperview().inset(20)
         }
         
-        // 스타일 지정 (생략된 부분 다시 추가)
+        titleLabel.textColor = .white
+        titleLabel.font = .boldSystemFont(ofSize: 24)
+        titleLabel.numberOfLines = 0
+        
+        overviewLabel.textColor = .lightGray
+        overviewLabel.font = .systemFont(ofSize: 16)
+        overviewLabel.numberOfLines = 0
+
         posterImageView.contentMode = .scaleAspectFit
         posterImageView.layer.cornerRadius = 8
         posterImageView.clipsToBounds = true
