@@ -22,9 +22,9 @@
 		F3FC485C2DD486E40040DF9D /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC485B2DD486E40040DF9D /* RxCocoa */; };
 		F3FC485E2DD486E40040DF9D /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC485D2DD486E40040DF9D /* RxRelay */; };
 		F3FC48612DD5E42D0040DF9D /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48602DD5E42D0040DF9D /* YouTubeiOSPlayerHelper */; };
-		F3FC48632DD9F2A40040DF9D /* MovieDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48622DD9F2A40040DF9D /* MovieDetail.swift */; };
 		F3FC48652DD9F2F20040DF9D /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */; };
 		F3FC48672DD9F3CC0040DF9D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48662DD9F3CC0040DF9D /* DetailViewController.swift */; };
+		F3FC486A2DDAFF1A0040DF9D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48692DDAFF1A0040DF9D /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +42,6 @@
 		F3FC48462DD332400040DF9D /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		F3FC48492DD335B30040DF9D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		F3FC484D2DD46A390040DF9D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		F3FC48622DD9F2A40040DF9D /* MovieDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetail.swift; sourceTree = "<group>"; };
 		F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		F3FC48662DD9F3CC0040DF9D /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,6 +55,7 @@
 				F3FC485C2DD486E40040DF9D /* RxCocoa in Frameworks */,
 				F33B71A92D919C8D00A49099 /* SnapKit in Frameworks */,
 				F3FC48612DD5E42D0040DF9D /* YouTubeiOSPlayerHelper in Frameworks */,
+				F3FC486A2DDAFF1A0040DF9D /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +116,6 @@
 			children = (
 				F33B71802D903DBD00A49099 /* Movie.swift */,
 				F33B71822D903DC700A49099 /* Video.swift */,
-				F3FC48622DD9F2A40040DF9D /* MovieDetail.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -170,6 +169,7 @@
 				F3FC485B2DD486E40040DF9D /* RxCocoa */,
 				F3FC485D2DD486E40040DF9D /* RxRelay */,
 				F3FC48602DD5E42D0040DF9D /* YouTubeiOSPlayerHelper */,
+				F3FC48692DDAFF1A0040DF9D /* Kingfisher */,
 			);
 			productName = Uflix;
 			productReference = F33B71332D89B66200A49099 /* Uflix.app */;
@@ -203,6 +203,7 @@
 				F33B71A72D919C8D00A49099 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F3FC485A2DD486E40040DF9D /* XCRemoteSwiftPackageReference "RxSwift" */,
 				F3FC485F2DD5E42D0040DF9D /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
+				F3FC48682DDAFF1A0040DF9D /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = F33B71342D89B66200A49099 /* Products */;
 			projectDirPath = "";
@@ -238,7 +239,6 @@
 				F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */,
 				F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */,
 				F33B71812D903DBD00A49099 /* Movie.swift in Sources */,
-				F3FC48632DD9F2A40040DF9D /* MovieDetail.swift in Sources */,
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,
 				F3FC48652DD9F2F20040DF9D /* DetailViewModel.swift in Sources */,
 				F3FC48472DD332400040DF9D /* MainViewModel.swift in Sources */,
@@ -479,6 +479,14 @@
 				minimumVersion = 1.0.4;
 			};
 		};
+		F3FC48682DDAFF1A0040DF9D /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -501,6 +509,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F3FC485F2DD5E42D0040DF9D /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
 			productName = YouTubeiOSPlayerHelper;
+		};
+		F3FC48692DDAFF1A0040DF9D /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F3FC48682DDAFF1A0040DF9D /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
