@@ -75,28 +75,4 @@ class MainViewModel {
                 self?.upcomingMovieSubject.onError(error)
             }).disposed(by: disposeBag)
     }
-    
-    /// 예고편 영상 key
-    func fetchTrailerKey(movie: Movie) -> Single<String> {
-        guard let movieId = movie.id else { return Single.error(NetworkError.dataFetchFail) }
-        let urlString = "https://api.themoviedb.org/3/movie/\(movieId)/videos?api_key=\(APIKeys.tmdb)"
-        guard let url = URL(string: urlString) else {
-            return Single.error(NetworkError.invalidUrl)
-        }
-        
-        /// --> flatMap? : Single의 String 타입으로 변환해줌 (싱글 타입 지정해주고 싶을 때 사용 가능하다 ⭐️)
-        /// VideoResponse.results.first: results 중 첫번째 영상 선택
-        /// key를 사용한 유튜브 영상 보기 위해 String Key 반환
-        return NetworkManager.shared.fetch(url: url) // --> 리턴타입: Signle<VideoResponse>
-            .flatMap { (VideoResponse: VideoResponse) -> Single<String> in
-                if let trailer = VideoResponse.results.first(where: { $0.type == "Trailer" && $0.site
-                    == "YouTube"}) {
-                    guard let key = trailer.key else { return Single.error(NetworkError.dataFetchFail) }
-                    return Single.just(key)
-                } else {
-                    return Single.error(NetworkError.dataFetchFail)
-                }
-            }
-    }
-    
 }

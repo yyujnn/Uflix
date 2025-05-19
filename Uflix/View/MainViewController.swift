@@ -40,7 +40,7 @@ class MainViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
-        configureUI()
+        setupUI()
     }
     
     private func bind() {
@@ -112,7 +112,7 @@ class MainViewController : UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
     
-    private func configureUI() {
+    private func setupUI() {
         view.backgroundColor = .black
         [
             label,
@@ -165,34 +165,22 @@ enum Section: Int, CaseIterable {
 extension MainViewController: UICollectionViewDelegate {
     // collectionView 클릭
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedMovie: Movie
+        
         switch Section(rawValue: indexPath.section) {
         case .popularMovies:
-            viewModel.fetchTrailerKey(movie: popularMovies[indexPath.row])
-                .observe(on: MainScheduler.instance)
-                .subscribe(onSuccess: { [weak self] key in
-                    self?.navigationController?.pushViewController(YoutubeViewController(key: key), animated: true)
-                }, onFailure: {error in
-                           print("에러 발생: \(error)")
-                }).disposed(by: disposeBag)
+            selectedMovie = popularMovies[indexPath.row]
         case .topRatedMovies:
-            viewModel.fetchTrailerKey(movie: topRatedMovies[indexPath.row])
-                .observe(on: MainScheduler.instance)
-                .subscribe(onSuccess: { [weak self] key in
-                    self?.navigationController?.pushViewController(YoutubeViewController(key: key), animated: true)
-                }, onFailure: {error in
-                           print("에러 발생: \(error)")
-                }).disposed(by: disposeBag)
+            selectedMovie = topRatedMovies[indexPath.row]
         case .upcomingMovies:
-            viewModel.fetchTrailerKey(movie: upcomingMovies[indexPath.row])
-                .observe(on: MainScheduler.instance)
-                .subscribe(onSuccess: { [weak self] key in
-                    self?.navigationController?.pushViewController(YoutubeViewController(key: key), animated: true)
-                }, onFailure: {error in
-                           print("에러 발생: \(error)")
-                }).disposed(by: disposeBag)
+            selectedMovie = upcomingMovies[indexPath.row]
         default:
-            return 
+            return
         }
+        
+        let detailViewModel = DetailViewModel(movie: selectedMovie)
+        let detailVC = DetailViewController(viewModel: detailViewModel)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
