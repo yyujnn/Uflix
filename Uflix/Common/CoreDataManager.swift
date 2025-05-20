@@ -19,7 +19,7 @@ class CoreDataManager {
     }()
     
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "FavoriteMovie")
+        let container = NSPersistentContainer(name: "UFlixModel")
         container.loadPersistentStores { _, error in
             if let error = error {
                 fatalError("CoreData 로드 실패: \(error)")
