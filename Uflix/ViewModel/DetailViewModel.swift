@@ -8,31 +8,51 @@
 import Foundation
 import RxSwift
 
-final class DetailViewModel {
+class DetailViewModel {
     
     private let disposeBag = DisposeBag()
-    
-    // input
     private let movie: Movie
-    
-    // output
+
     let movieDetail: BehaviorSubject<Movie>
     let trailerKey = PublishSubject<String>()
     let error = PublishSubject<Error>()
+//    let isFavorite: BehaviorSubject<Bool>
+    let isFavorite = BehaviorSubject<Bool>(value: false)
     
     init(movie: Movie) {
         self.movie = movie
         self.movieDetail = BehaviorSubject(value: movie)
+        checkFavoriteStatus()
         fetchTrailerKey()
+    }
+    
+    func checkFavoriteStatus() {
+        let current = CoreDataManager.shared.isFavorite(id: movie.id)
+        isFavorite.onNext(current)
+    }
+    
+    func toggleFavorite() {
+        let id = movie.id
+        let current = (try? isFavorite.value()) ?? false
+        
+        if current {
+            CoreDataManager.shared.deleteFavorite(id: id)
+            isFavorite.onNext(false)
+            // onNext(...) → "이벤트 발생"
+        } else {
+            CoreDataManager.shared.saveFavorite(movie: movie)
+            isFavorite.onNext(true)
+        }
+        
+        // 확인 log
+        let all = CoreDataManager.shared.fetchFavorites()
+        print("✅ 저장된 찜 목록 개수: \(all.count)")
+        all.forEach{ print("찜 영화: \($0.title ?? "제목 없음")")}
     }
     
     /// 예고편 영상 key
     func fetchTrailerKey() {
-        guard let movieId = movie.id else {
-            error.onNext(NetworkError.dataFetchFail)
-            return
-        }
-        
+        let movieId = movie.id
         let urlString = "https://api.themoviedb.org/3/movie/\(movieId)/videos?api_key=\(APIKeys.tmdb)"
         guard let url = URL(string: urlString) else {
             error.onNext(NetworkError.invalidUrl)
