@@ -39,12 +39,30 @@ class DetailViewController: UIViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.checkFavoriteStatus()
+    }
+
+    @objc private func didTapLike() {
+        print("🟢 찜 버튼 눌림")
+        viewModel.toggleFavorite()
+    }
+    
     private func bind() {
         viewModel.movieDetail
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] movie in
-                print(movie)
                 self?.configure(movie: movie)
+            }).disposed(by: disposeBag)
+        
+        viewModel.isFavorite
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] isFav in
+                // 여기 콜백은 언제든 값이 emit 되면 실행
+                // subscribe(...) → "이벤트 받기"
+                let title = isFav ?  "❤️ 찜 취소" : "🤍 찜하기"
+                self?.likeButton.setTitle(title, for: .normal)
             }).disposed(by: disposeBag)
         
         viewModel.trailerKey
@@ -86,7 +104,14 @@ class DetailViewController: UIViewController {
             $0.left.right.equalToSuperview().inset(20)
         }
         
-        // 스타일 지정 (생략된 부분 다시 추가)
+        titleLabel.textColor = .white
+        titleLabel.font = .boldSystemFont(ofSize: 24)
+        titleLabel.numberOfLines = 0
+        
+        overviewLabel.textColor = .lightGray
+        overviewLabel.font = .systemFont(ofSize: 16)
+        overviewLabel.numberOfLines = 0
+
         posterImageView.contentMode = .scaleAspectFit
         posterImageView.layer.cornerRadius = 8
         posterImageView.clipsToBounds = true
@@ -95,6 +120,7 @@ class DetailViewController: UIViewController {
         likeButton.setTitleColor(.white, for: .normal)
         likeButton.backgroundColor = .darkGray
         likeButton.layer.cornerRadius = 8
+        likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
         likeButton.snp.makeConstraints { $0.height.equalTo(44) }
         
         // stackView에 추가

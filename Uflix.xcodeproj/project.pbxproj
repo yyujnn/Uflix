@@ -25,6 +25,10 @@
 		F3FC48652DD9F2F20040DF9D /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */; };
 		F3FC48672DD9F3CC0040DF9D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48662DD9F3CC0040DF9D /* DetailViewController.swift */; };
 		F3FC486A2DDAFF1A0040DF9D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F3FC48692DDAFF1A0040DF9D /* Kingfisher */; };
+		F3FC486D2DDB2AE60040DF9D /* UFlixModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F3FC486B2DDB2AE60040DF9D /* UFlixModel.xcdatamodeld */; };
+		F3FC486F2DDB2B8B0040DF9D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC486E2DDB2B8B0040DF9D /* CoreDataManager.swift */; };
+		F3FC48762DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48742DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift */; };
+		F3FC48772DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48752DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +48,10 @@
 		F3FC484D2DD46A390040DF9D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		F3FC48662DD9F3CC0040DF9D /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		F3FC486C2DDB2AE60040DF9D /* FavoriteMovie.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FavoriteMovie.xcdatamodel; sourceTree = "<group>"; };
+		F3FC486E2DDB2B8B0040DF9D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		F3FC48742DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteMovie+CoreDataClass.swift"; sourceTree = "<group>"; };
+		F3FC48752DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteMovie+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,10 +95,6 @@
 				F33B717E2D903D3C00A49099 /* Model */,
 				F33B717F2D903D5100A49099 /* View */,
 				F33B714D2D89B6A000A49099 /* ViewModel */,
-				F33B71362D89B66200A49099 /* AppDelegate.swift */,
-				F33B713F2D89B66400A49099 /* Assets.xcassets */,
-				F33B71412D89B66400A49099 /* LaunchScreen.storyboard */,
-				F33B71442D89B66400A49099 /* Info.plist */,
 			);
 			path = Uflix;
 			sourceTree = "<group>";
@@ -98,6 +102,11 @@
 		F33B714A2D89B67C00A49099 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				F33B71362D89B66200A49099 /* AppDelegate.swift */,
+				F33B713F2D89B66400A49099 /* Assets.xcassets */,
+				F33B71412D89B66400A49099 /* LaunchScreen.storyboard */,
+				F33B71442D89B66400A49099 /* Info.plist */,
+				F3FC486B2DDB2AE60040DF9D /* UFlixModel.xcdatamodeld */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -116,6 +125,8 @@
 			children = (
 				F33B71802D903DBD00A49099 /* Movie.swift */,
 				F33B71822D903DC700A49099 /* Video.swift */,
+				F3FC48742DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift */,
+				F3FC48752DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -136,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				F3FC48492DD335B30040DF9D /* NetworkManager.swift */,
+				F3FC486E2DDB2B8B0040DF9D /* CoreDataManager.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -237,6 +249,10 @@
 				F3FC48672DD9F3CC0040DF9D /* DetailViewController.swift in Sources */,
 				F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */,
 				F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */,
+				F3FC486D2DDB2AE60040DF9D /* UFlixModel.xcdatamodeld in Sources */,
+				F3FC486F2DDB2B8B0040DF9D /* CoreDataManager.swift in Sources */,
+				F3FC48762DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift in Sources */,
+				F3FC48772DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift in Sources */,
 				F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */,
 				F33B71812D903DBD00A49099 /* Movie.swift in Sources */,
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,
@@ -387,7 +403,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Uflix/Info.plist;
+				INFOPLIST_FILE = Uflix/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -413,7 +429,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Uflix/Info.plist;
+				INFOPLIST_FILE = Uflix/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -516,6 +532,19 @@
 			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		F3FC486B2DDB2AE60040DF9D /* UFlixModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F3FC486C2DDB2AE60040DF9D /* FavoriteMovie.xcdatamodel */,
+			);
+			currentVersion = F3FC486C2DDB2AE60040DF9D /* FavoriteMovie.xcdatamodel */;
+			path = UFlixModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F33B712B2D89B66200A49099 /* Project object */;
 }
