@@ -39,11 +39,30 @@ class DetailViewController: UIViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.checkFavoriteStatus()
+    }
+
+    @objc private func didTapLike() {
+        print("🟢 찜 버튼 눌림")
+        viewModel.toggleFavorite()
+    }
+    
     private func bind() {
         viewModel.movieDetail
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] movie in
                 self?.configure(movie: movie)
+            }).disposed(by: disposeBag)
+        
+        viewModel.isFavorite
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] isFav in
+                // 여기 콜백은 언제든 값이 emit 되면 실행
+                // subscribe(...) → "이벤트 받기"
+                let title = isFav ?  "❤️ 찜 취소" : "🤍 찜하기"
+                self?.likeButton.setTitle(title, for: .normal)
             }).disposed(by: disposeBag)
         
         viewModel.trailerKey
@@ -101,6 +120,7 @@ class DetailViewController: UIViewController {
         likeButton.setTitleColor(.white, for: .normal)
         likeButton.backgroundColor = .darkGray
         likeButton.layer.cornerRadius = 8
+        likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
         likeButton.snp.makeConstraints { $0.height.equalTo(44) }
         
         // stackView에 추가
