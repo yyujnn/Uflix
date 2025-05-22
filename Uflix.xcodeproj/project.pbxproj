@@ -29,6 +29,9 @@
 		F3FC486F2DDB2B8B0040DF9D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC486E2DDB2B8B0040DF9D /* CoreDataManager.swift */; };
 		F3FC48762DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48742DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift */; };
 		F3FC48772DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48752DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift */; };
+		F3FC48792DDC72BC0040DF9D /* MyNetflixViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48782DDC72BC0040DF9D /* MyNetflixViewController.swift */; };
+		F3FC487B2DDC72C50040DF9D /* MyNetflixViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC487A2DDC72C50040DF9D /* MyNetflixViewModel.swift */; };
+		F3FC487D2DDEEF9A0040DF9D /* FavoriteMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC487C2DDEEF9A0040DF9D /* FavoriteMovieCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +55,9 @@
 		F3FC486E2DDB2B8B0040DF9D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		F3FC48742DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteMovie+CoreDataClass.swift"; sourceTree = "<group>"; };
 		F3FC48752DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteMovie+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		F3FC48782DDC72BC0040DF9D /* MyNetflixViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixViewController.swift; sourceTree = "<group>"; };
+		F3FC487A2DDC72C50040DF9D /* MyNetflixViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixViewModel.swift; sourceTree = "<group>"; };
+		F3FC487C2DDEEF9A0040DF9D /* FavoriteMovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMovieCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +122,7 @@
 			children = (
 				F3FC48462DD332400040DF9D /* MainViewModel.swift */,
 				F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */,
+				F3FC487A2DDC72C50040DF9D /* MyNetflixViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -139,6 +146,8 @@
 				F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */,
 				F33B71AC2D919D0600A49099 /* YoutubeViewController.swift */,
 				F3FC48662DD9F3CC0040DF9D /* DetailViewController.swift */,
+				F3FC48782DDC72BC0040DF9D /* MyNetflixViewController.swift */,
+				F3FC487C2DDEEF9A0040DF9D /* FavoriteMovieCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -250,9 +259,12 @@
 				F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */,
 				F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */,
 				F3FC486D2DDB2AE60040DF9D /* UFlixModel.xcdatamodeld in Sources */,
+				F3FC48792DDC72BC0040DF9D /* MyNetflixViewController.swift in Sources */,
 				F3FC486F2DDB2B8B0040DF9D /* CoreDataManager.swift in Sources */,
 				F3FC48762DDB2E7B0040DF9D /* FavoriteMovie+CoreDataClass.swift in Sources */,
+				F3FC487D2DDEEF9A0040DF9D /* FavoriteMovieCell.swift in Sources */,
 				F3FC48772DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift in Sources */,
+				F3FC487B2DDC72C50040DF9D /* MyNetflixViewModel.swift in Sources */,
 				F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */,
 				F33B71812D903DBD00A49099 /* Movie.swift in Sources */,
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,
