@@ -32,10 +32,19 @@ class MyNetflixViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .white
+        title = "My Netflix"
         
+        tableView.register(FavoriteMovieCell.self, forCellReuseIdentifier: FavoriteMovieCell.identifier)
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
     
     private func bind() {
-        
+        viewModel.favoriteMovies
+            .bind(to: tableView.rx.items(cellIdentifier: FavoriteMovieCell.identifier, cellType: FavoriteMovieCell.self)) { index, movie, cell in
+                cell.configure(movie: movie)
+            }.disposed(by: disposeBag)
     }
 }
