@@ -19,11 +19,12 @@ class MainViewController : UIViewController {
     private var topRatedMovies = [Movie]()
     private var upcomingMovies = [Movie]()
     
-    private let label: UILabel = {
+    private let logoLabel: UILabel = {
         let label = UILabel()
         label.text = "NETFLIX"
         label.textColor = UIColor(red: 229/255, green: 9/255, blue: 20/255, alpha: 1.0)
-        label.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
+        label.font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 32) ?? UIFont.boldSystemFont(ofSize: 32)
+        label.textAlignment = .center
         return label
     }()
     
@@ -43,6 +44,11 @@ class MainViewController : UIViewController {
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
     private func bind() {
         viewModel.popularMovieSubject
             .observe(on: MainScheduler.instance) // UI 메인스레드 작업
@@ -115,17 +121,17 @@ class MainViewController : UIViewController {
     private func setupUI() {
         view.backgroundColor = .black
         [
-            label,
+            logoLabel,
             collectionView
         ].forEach { view.addSubview($0) }
         
-        label.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(10)
+        logoLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).inset(10)
         }
         
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(label.snp.bottom).offset(20)
+            $0.top.equalTo(logoLabel.snp.bottom).offset(20)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide.snp.horizontalEdges)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }

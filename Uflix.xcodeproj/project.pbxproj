@@ -32,6 +32,7 @@
 		F3FC48792DDC72BC0040DF9D /* MyNetflixViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48782DDC72BC0040DF9D /* MyNetflixViewController.swift */; };
 		F3FC487B2DDC72C50040DF9D /* MyNetflixViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC487A2DDC72C50040DF9D /* MyNetflixViewModel.swift */; };
 		F3FC487D2DDEEF9A0040DF9D /* FavoriteMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC487C2DDEEF9A0040DF9D /* FavoriteMovieCell.swift */; };
+		F3FC48812DDEFCD70040DF9D /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48802DDEFCD70040DF9D /* MainTabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		F3FC48782DDC72BC0040DF9D /* MyNetflixViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixViewController.swift; sourceTree = "<group>"; };
 		F3FC487A2DDC72C50040DF9D /* MyNetflixViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixViewModel.swift; sourceTree = "<group>"; };
 		F3FC487C2DDEEF9A0040DF9D /* FavoriteMovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMovieCell.swift; sourceTree = "<group>"; };
+		F3FC48802DDEFCD70040DF9D /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 		F33B717F2D903D5100A49099 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F3FC48802DDEFCD70040DF9D /* MainTabBarController.swift */,
 				F33B713A2D89B66200A49099 /* MainViewController.swift */,
 				F33B71AA2D919CCE00A49099 /* PosterCell.swift */,
 				F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */,
@@ -265,6 +268,7 @@
 				F3FC487D2DDEEF9A0040DF9D /* FavoriteMovieCell.swift in Sources */,
 				F3FC48772DDB2E7B0040DF9D /* FavoriteMovie+CoreDataProperties.swift in Sources */,
 				F3FC487B2DDC72C50040DF9D /* MyNetflixViewModel.swift in Sources */,
+				F3FC48812DDEFCD70040DF9D /* MainTabBarController.swift in Sources */,
 				F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */,
 				F33B71812D903DBD00A49099 /* Movie.swift in Sources */,
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,

@@ -30,9 +30,13 @@ class MyNetflixViewController: UIViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
     private func setupUI() {
         view.backgroundColor = .white
-        title = "My Netflix"
         
         tableView.register(FavoriteMovieCell.self, forCellReuseIdentifier: FavoriteMovieCell.identifier)
         view.addSubview(tableView)
