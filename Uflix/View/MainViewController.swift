@@ -11,7 +11,8 @@ import RxSwift
 import AVKit
 import AVFoundation
 
-class MainViewController : UIViewController {
+class MainViewController : BaseViewController {
+    override var hidesNavigationBar: Bool { return true }
 
     private let viewModel = MainViewModel()
     private let disposeBag = DisposeBag()
@@ -42,11 +43,6 @@ class MainViewController : UIViewController {
         super.viewDidLoad()
         bind()
         setupUI()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     private func bind() {

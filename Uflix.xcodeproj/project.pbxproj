@@ -33,6 +33,7 @@
 		F3FC487B2DDC72C50040DF9D /* MyNetflixViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC487A2DDC72C50040DF9D /* MyNetflixViewModel.swift */; };
 		F3FC487D2DDEEF9A0040DF9D /* FavoriteMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC487C2DDEEF9A0040DF9D /* FavoriteMovieCell.swift */; };
 		F3FC48812DDEFCD70040DF9D /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48802DDEFCD70040DF9D /* MainTabBarController.swift */; };
+		F3FC48832DDF0F920040DF9D /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48822DDF0F920040DF9D /* BaseViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		F3FC487A2DDC72C50040DF9D /* MyNetflixViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNetflixViewModel.swift; sourceTree = "<group>"; };
 		F3FC487C2DDEEF9A0040DF9D /* FavoriteMovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMovieCell.swift; sourceTree = "<group>"; };
 		F3FC48802DDEFCD70040DF9D /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		F3FC48822DDF0F920040DF9D /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				F3FC48802DDEFCD70040DF9D /* MainTabBarController.swift */,
+				F3FC48822DDF0F920040DF9D /* BaseViewController.swift */,
 				F33B713A2D89B66200A49099 /* MainViewController.swift */,
 				F33B71AA2D919CCE00A49099 /* PosterCell.swift */,
 				F33B71AE2D919EDE00A49099 /* SectionHeaderView.swift */,
@@ -260,6 +263,7 @@
 				F33B71AB2D919CCE00A49099 /* PosterCell.swift in Sources */,
 				F3FC48672DD9F3CC0040DF9D /* DetailViewController.swift in Sources */,
 				F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */,
+				F3FC48832DDF0F920040DF9D /* BaseViewController.swift in Sources */,
 				F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */,
 				F3FC486D2DDB2AE60040DF9D /* UFlixModel.xcdatamodeld in Sources */,
 				F3FC48792DDC72BC0040DF9D /* MyNetflixViewController.swift in Sources */,

@@ -9,7 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class MyNetflixViewController: UIViewController {
+class MyNetflixViewController: BaseViewController {
+    override var hidesNavigationBar: Bool { return true }
+    
     private let viewModel: MyNetflixViewModel
     private let disposeBag = DisposeBag()
     

@@ -26,7 +26,6 @@ class MainTabBarController: UITabBarController {
         tabBar.tintColor = .white
         tabBar.unselectedItemTintColor = .lightGray
         tabBar.isTranslucent = false
-        UINavigationBar.appearance().tintColor = .white
         
         /// TODO: SearchVC 준비
         let homeNav = UINavigationController(rootViewController: homeVC)
