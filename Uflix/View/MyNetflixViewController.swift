@@ -42,9 +42,27 @@ class MyNetflixViewController: UIViewController {
     }
     
     private func bind() {
+        // 데이터 바인딩
         viewModel.favoriteMovies
             .bind(to: tableView.rx.items(cellIdentifier: FavoriteMovieCell.identifier, cellType: FavoriteMovieCell.self)) { index, movie, cell in
                 cell.configure(movie: movie)
             }.disposed(by: disposeBag)
+        
+        // 셀  클릭: 상세 페이지 이동
+        tableView.rx.modelSelected(FavoriteMovie.self)
+            .subscribe(onNext: { [weak self] movie in
+                let model = Movie(id: Int(movie.id), title: movie.title ?? "", posterPath: movie.posterPath, overview: movie.overview ?? "")
+                let detailVM = DetailViewModel(movie: model)
+                let detailVC = DetailViewController(viewModel: detailVM)
+                self?.navigationController?.pushViewController(detailVC, animated: true)
+            }).disposed(by: disposeBag)
+        
+        // 스와이프 삭제
+        tableView.rx.itemDeleted
+            .subscribe(onNext: { [weak self] indexPath in
+                guard let self = self else { return }
+                let movie = self.viewModel.favoriteMovies.value[indexPath.row]
+                self.viewModel.deleteFavorite(movie)
+            }).disposed(by: disposeBag)
     }
 }
