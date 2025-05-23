@@ -10,7 +10,9 @@ import RxSwift
 import RxCocoa
 import SnapKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: BaseViewController {
+    override var hidesNavigationBar: Bool { return true }
+    
     private let viewModel = SearchViewModel()
     private let disposeBag = DisposeBag()
     
@@ -18,6 +20,7 @@ class SearchViewController: UIViewController {
     private let tableView = UITableView()
     private let headerLabel = UILabel()
     private let clearButton = UIButton(type: .system)
+    private let headerView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,12 +54,35 @@ class SearchViewController: UIViewController {
         }
         
         setupTableHeader()
-        
     }
     
     private func setupTableHeader() {
-        // 헤더 뷰 자체 생성
+        headerView.backgroundColor = .black
         
+        headerLabel.text = "최근 검색어"
+        headerLabel.textColor = .white
+        headerLabel.font = .boldSystemFont(ofSize: 16)
+        
+        clearButton.setTitle("전체 삭제", for: .normal)
+        clearButton.setTitleColor(.gray, for: .normal)
+        clearButton.titleLabel?.font = .systemFont(ofSize: 14)
+        
+        [headerLabel, clearButton].forEach { headerView.addSubview($0) }
+        
+        headerLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.centerY.equalToSuperview()
+        }
+        
+        clearButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+        }
+
+        
+        // 임시 높이 설정 (실제는 viewDidLayoutSubviews에서 재계산됨)
+        headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 44)
+        tableView.tableHeaderView = headerView
     }
     
     private func bind() {
