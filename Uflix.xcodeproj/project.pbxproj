@@ -38,6 +38,7 @@
 		F3FC48872DE04F3C0040DF9D /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48862DE04F3C0040DF9D /* SearchViewModel.swift */; };
 		F3FC48892DE0594A0040DF9D /* SearchHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48882DE0594A0040DF9D /* SearchHistoryManager.swift */; };
 		F3FC488B2DE064A10040DF9D /* HistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC488A2DE064A10040DF9D /* HistoryCell.swift */; };
+		F3FC488D2DE45B630040DF9D /* SearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC488C2DE45B630040DF9D /* SearchResultView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		F3FC48862DE04F3C0040DF9D /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		F3FC48882DE0594A0040DF9D /* SearchHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryManager.swift; sourceTree = "<group>"; };
 		F3FC488A2DE064A10040DF9D /* HistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCell.swift; sourceTree = "<group>"; };
+		F3FC488C2DE45B630040DF9D /* SearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 				F3FC48782DDC72BC0040DF9D /* MyNetflixViewController.swift */,
 				F3FC487C2DDEEF9A0040DF9D /* FavoriteMovieCell.swift */,
 				F3FC48842DE04F1E0040DF9D /* SearchViewController.swift */,
+				F3FC488C2DE45B630040DF9D /* SearchResultView.swift */,
 				F3FC488A2DE064A10040DF9D /* HistoryCell.swift */,
 			);
 			path = View;
@@ -294,6 +297,7 @@
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,
 				F3FC48652DD9F2F20040DF9D /* DetailViewModel.swift in Sources */,
 				F3FC48472DD332400040DF9D /* MainViewModel.swift in Sources */,
+				F3FC488D2DE45B630040DF9D /* SearchResultView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
