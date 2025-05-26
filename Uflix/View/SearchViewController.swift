@@ -21,6 +21,7 @@ class SearchViewController: BaseViewController {
     private let headerLabel = UILabel()
     private let clearButton = UIButton(type: .system)
     private let headerView = UIView()
+    private let resultView = SearchResultView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,17 +30,42 @@ class SearchViewController: BaseViewController {
     }
     
     private func bind() {
+        searchBar.rx.text.orEmpty
+            .skip(1)
+            .distinctUntilChanged()
+            .bind(onNext: { [weak self] text in
+                guard let self = self else { return }
+                if text.isEmpty {
+                    self.tableView.isHidden = false
+                    self.resultView.isHidden = true
+                } else {
+                    self.tableView.isHidden = true
+                    self.resultView.isHidden = false
+                }
+                self.viewModel.query.accept(text)
+            }).disposed(by: disposeBag)
+        
         // viewModel 바인딩
         viewModel.recentSearches
             .bind(to: tableView.rx.items(
-                cellIdentifier: HistoryCell.identifier, cellType: HistoryCell.self
+                cellIdentifier: HistoryCell.identifier,
+                cellType: HistoryCell.self
             )) {_, keyword, cell in
                 cell.configure(with: keyword)
+            }.disposed(by: disposeBag)
+        
+        viewModel.results
+            .bind(to: resultView.collectionView.rx.items(
+                cellIdentifier: PosterCell.id,
+                cellType: PosterCell.self
+            )) {_, movie, cell in
+                cell.configure(with: movie)
             }.disposed(by: disposeBag)
     }
     
     private func setupUI() {
         view.backgroundColor = .black
+        resultView.isHidden = true
         
         searchBar.placeholder = "영화를 검색해보세요."
         searchBar.barStyle = .black
@@ -51,7 +77,7 @@ class SearchViewController: BaseViewController {
         tableView.separatorStyle = .none
         tableView.register(HistoryCell.self, forCellReuseIdentifier: HistoryCell.identifier)
         
-        [ searchBar, tableView ].forEach{ view.addSubview($0) }
+        [ searchBar, tableView, resultView ].forEach{ view.addSubview($0) }
         
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
@@ -61,6 +87,11 @@ class SearchViewController: BaseViewController {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        resultView.snp.makeConstraints {
+            $0.top.equalTo(searchBar.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
         
         setupTableHeader()
