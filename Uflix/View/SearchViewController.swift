@@ -28,6 +28,16 @@ class SearchViewController: BaseViewController {
         bind()
     }
     
+    private func bind() {
+        // viewModel 바인딩
+        viewModel.recentSearches
+            .bind(to: tableView.rx.items(
+                cellIdentifier: HistoryCell.identifier, cellType: HistoryCell.self
+            )) {_, keyword, cell in
+                cell.configure(with: keyword)
+            }.disposed(by: disposeBag)
+    }
+    
     private func setupUI() {
         view.backgroundColor = .black
         
@@ -39,7 +49,7 @@ class SearchViewController: BaseViewController {
         
         tableView.backgroundColor = .black
         tableView.separatorStyle = .none
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: HistoryCell.identifier)
+        tableView.register(HistoryCell.self, forCellReuseIdentifier: HistoryCell.identifier)
         
         [ searchBar, tableView ].forEach{ view.addSubview($0) }
         
@@ -83,9 +93,5 @@ class SearchViewController: BaseViewController {
         // 임시 높이 설정 (실제는 viewDidLayoutSubviews에서 재계산됨)
         headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 44)
         tableView.tableHeaderView = headerView
-    }
-    
-    private func bind() {
-        // viewModel 바인딩
     }
 }
