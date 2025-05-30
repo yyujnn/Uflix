@@ -9,6 +9,13 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+enum TMDBEndpoint {
+    static func searchMovie(query: String) -> URL? {
+        let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        return URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(APIKeys.tmdb)&query=\(encoded)")
+    }
+}
+
 class SearchViewModel {
     // Input
     // PublishRelay --> 초기값 x, 이벤트 발생(버튼/탭 등)
@@ -28,8 +35,11 @@ class SearchViewModel {
     init() {
         // qeury 바인딩
         bindInput()
-      
-        // 더미 초기화
+        testDummy()
+    }
+    
+    func testDummy() {
+        // 더미 검색어 초기화
         recentSearches = BehaviorRelay<[String]>(value: [
             "범죄도시4",
             "인터스텔라",
@@ -37,13 +47,41 @@ class SearchViewModel {
             "어벤져스",
             "라라랜드"
         ])
+        
+        // 더미 영화들
+        let dummyMovies: [Movie] = [
+            Movie(id: 1, title: "인터스텔라", posterPath: "/xyz.jpg", overview: "우주 탐사"),
+            Movie(id: 2, title: "듄: 파트2", posterPath: "/abc.jpg", overview: "사막 전쟁")
+        ]
+        results.accept(dummyMovies)
     }
     
-    func searchMovie(query: String) {
-        // API 호출 로직
+    // API 호출 로직
+    func searchMovie(query: String) -> Observable<[Movie]>{
+        guard let url = TMDBEndpoint.searchMovie(query: query) else {
+            return .error(NetworkError.invalidUrl)
+        }
+        
+        return NetworkManager.shared.fetch(url: url)
+            .asObservable()
+            .map{ (response: MovieResponse) in response.results }
     }
     
     private func bindInput() {
+        // 검색어 입력  → TMDB 검색 API 호출
+        query.debounce(.microseconds(300), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .flatMapLatest{ [weak self] keyword -> Observable<[Movie]> in
+                guard let self = self else { return .empty() }
+                return self.searchMovie(query: keyword)
+            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] movies in
+                self?.results.accept(movies)
+            }, onError: { [weak self] error in
+                self?.error.accept(error)
+            }).disposed(by: disposeBag)
+            
         // 전체 삭제
         clearAllTapped
             .subscribe(onNext: {
