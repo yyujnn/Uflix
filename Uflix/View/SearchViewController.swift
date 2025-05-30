@@ -30,35 +30,47 @@ class SearchViewController: BaseViewController {
     }
     
     private func bind() {
+        // 검색어 입력 → query로 전달
         searchBar.rx.text.orEmpty
             .skip(1)
             .distinctUntilChanged()
+            .bind(to: viewModel.query)
+            .disposed(by: disposeBag)
+        
+        // 검색어 입력 여부에 따른 화면 전환
+        searchBar.rx.text.orEmpty
             .bind(onNext: { [weak self] text in
                 guard let self = self else { return }
-                if text.isEmpty {
-                    self.tableView.isHidden = false
-                    self.resultView.isHidden = true
-                } else {
-                    self.tableView.isHidden = true
-                    self.resultView.isHidden = false
-                }
-                self.viewModel.query.accept(text)
+                let isEmpty = text.isEmpty
+                self.tableView.isHidden = !isEmpty
+                self.resultView.isHidden = isEmpty
             }).disposed(by: disposeBag)
         
-        // viewModel 바인딩
+        // [Input] '전체 삭제' 버튼 탭 → clearAllTapped
+        clearButton.rx.tap
+            .bind(to: viewModel.clearAllTapped)
+            .disposed(by: disposeBag)
+        
+        // [Input] 검색 기록 선택 → selectedKeyword
+        tableView.rx.modelSelected(String.self)
+            .bind(to: viewModel.selectedKeyword)
+            .disposed(by: disposeBag)
+        
+        // [Output] 최근 검색어 → tableView 렌더링
         viewModel.recentSearches
             .bind(to: tableView.rx.items(
                 cellIdentifier: HistoryCell.identifier,
                 cellType: HistoryCell.self
-            )) {_, keyword, cell in
+            )) { _, keyword, cell in
                 cell.configure(with: keyword)
             }.disposed(by: disposeBag)
         
+        // [Output] 검색 결과 → collectionView 렌더링
         viewModel.results
             .bind(to: resultView.collectionView.rx.items(
                 cellIdentifier: PosterCell.id,
                 cellType: PosterCell.self
-            )) {_, movie, cell in
+            )) { _, movie, cell in
                 cell.configure(with: movie)
             }.disposed(by: disposeBag)
     }
