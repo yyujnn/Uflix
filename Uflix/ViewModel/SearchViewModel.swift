@@ -35,25 +35,6 @@ class SearchViewModel {
     init() {
         // qeury 바인딩
         bindInput()
-        testDummy()
-    }
-    
-    func testDummy() {
-        // 더미 검색어 초기화
-        recentSearches = BehaviorRelay<[String]>(value: [
-            "범죄도시4",
-            "인터스텔라",
-            "해리포터",
-            "어벤져스",
-            "라라랜드"
-        ])
-        
-        // 더미 영화들
-        let dummyMovies: [Movie] = [
-            Movie(id: 1, title: "인터스텔라", posterPath: "/xyz.jpg", overview: "우주 탐사"),
-            Movie(id: 2, title: "듄: 파트2", posterPath: "/abc.jpg", overview: "사막 전쟁")
-        ]
-        results.accept(dummyMovies)
     }
     
     // API 호출 로직
