@@ -21,42 +21,43 @@ class SearchViewController: BaseViewController {
     private let headerLabel = UILabel()
     private let clearButton = UIButton(type: .system)
     private let headerView = UIView()
-    private let resultView = SearchResultView()
+    
+    // TODO: 분기 처리 필요
+    enum SearchMode { case recent, suggest }
+    private var mode: SearchMode = .recent {
+        didSet { updateView(for: mode) }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
         setupUI()
         bind()
     }
     
     private func bind() {
-        // 검색어 입력 → query로 전달
-        searchBar.rx.text.orEmpty
-            .skip(1)
-            .distinctUntilChanged()
-            .bind(to: viewModel.query)
-            .disposed(by: disposeBag)
-        
-        // 검색어 입력 여부에 따른 화면 전환
         searchBar.rx.text.orEmpty
             .bind(onNext: { [weak self] text in
                 guard let self = self else { return }
-                let isEmpty = text.isEmpty
-                self.tableView.isHidden = !isEmpty
-                self.resultView.isHidden = isEmpty
+                if text.isEmpty {
+                   self.mode = .recent
+               } else {
+                   self.mode = .suggest
+                   // self.viewModel.query.accept(text) 추천 검색어 연동할 경우
+               }
             }).disposed(by: disposeBag)
         
-        // [Input] '전체 삭제' 버튼 탭 → clearAllTapped
         clearButton.rx.tap
             .bind(to: viewModel.clearAllTapped)
             .disposed(by: disposeBag)
         
-        // [Input] 검색 기록 선택 → selectedKeyword
+        // TODO: keyword 이동
         tableView.rx.modelSelected(String.self)
             .bind(to: viewModel.selectedKeyword)
             .disposed(by: disposeBag)
         
-        // [Output] 최근 검색어 → tableView 렌더링
+        // [Output] 
+        // 최근 검색어 출력
         viewModel.recentSearches
             .bind(to: tableView.rx.items(
                 cellIdentifier: HistoryCell.identifier,
@@ -65,19 +66,14 @@ class SearchViewController: BaseViewController {
                 cell.configure(with: keyword)
             }.disposed(by: disposeBag)
         
-        // [Output] 검색 결과 → collectionView 렌더링
-        viewModel.results
-            .bind(to: resultView.collectionView.rx.items(
-                cellIdentifier: PosterCell.id,
-                cellType: PosterCell.self
-            )) { _, movie, cell in
-                cell.configure(with: movie)
-            }.disposed(by: disposeBag)
+    }
+    
+    private func updateView(for mode: SearchMode) {
+        tableView.isHidden = false
     }
     
     private func setupUI() {
         view.backgroundColor = .black
-        resultView.isHidden = true
         
         searchBar.placeholder = "영화를 검색해보세요."
         searchBar.barStyle = .black
@@ -89,7 +85,7 @@ class SearchViewController: BaseViewController {
         tableView.separatorStyle = .none
         tableView.register(HistoryCell.self, forCellReuseIdentifier: HistoryCell.identifier)
         
-        [ searchBar, tableView, resultView ].forEach{ view.addSubview($0) }
+        [ searchBar, tableView ].forEach{ view.addSubview($0) }
         
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
@@ -99,11 +95,6 @@ class SearchViewController: BaseViewController {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        resultView.snp.makeConstraints {
-            $0.top.equalTo(searchBar.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview()
         }
         
         setupTableHeader()
@@ -132,9 +123,20 @@ class SearchViewController: BaseViewController {
             make.centerY.equalToSuperview()
         }
 
-        
-        // 임시 높이 설정 (실제는 viewDidLayoutSubviews에서 재계산됨)
         headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 44)
         tableView.tableHeaderView = headerView
     }
+}
+extension SearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        // TODO: 검색 실시간 suggest
+        let keyword = searchBar.text ?? ""
+        guard !keyword.isEmpty else { return }
+        
+        viewModel.selectedKeyword.accept(keyword)
+        let resultVC = SearchResultViewController(keyword: keyword)
+        print("🔍 전달된 keyword:", keyword)
+        navigationController?.pushViewController(resultVC, animated: true)
+    }
+  
 }
