@@ -51,13 +51,12 @@ class SearchViewController: BaseViewController {
             .bind(to: viewModel.clearAllTapped)
             .disposed(by: disposeBag)
         
-        // TODO: keyword 이동
         tableView.rx.modelSelected(String.self)
-            .bind(to: viewModel.selectedKeyword)
-            .disposed(by: disposeBag)
+            .subscribe(onNext: { [weak self] keyword in
+                self?.viewModel.selectedKeyword.accept(keyword)
+                self?.navigateToResult(keyword: keyword)
+            }).disposed(by: disposeBag)
         
-        // [Output] 
-        // 최근 검색어 출력
         viewModel.recentSearches
             .bind(to: tableView.rx.items(
                 cellIdentifier: HistoryCell.identifier,
@@ -66,6 +65,12 @@ class SearchViewController: BaseViewController {
                 cell.configure(with: keyword)
             }.disposed(by: disposeBag)
         
+    }
+    
+    private func navigateToResult(keyword: String) {
+        viewModel.selectedKeyword.accept(keyword)
+        let resultVC = SearchResultViewController(keyword: keyword)
+        navigationController?.pushViewController(resultVC, animated: true)
     }
     
     private func updateView(for mode: SearchMode) {
@@ -132,11 +137,6 @@ extension SearchViewController: UISearchBarDelegate {
         // TODO: 검색 실시간 suggest
         let keyword = searchBar.text ?? ""
         guard !keyword.isEmpty else { return }
-        
-        viewModel.selectedKeyword.accept(keyword)
-        let resultVC = SearchResultViewController(keyword: keyword)
-        print("🔍 전달된 keyword:", keyword)
-        navigationController?.pushViewController(resultVC, animated: true)
+        navigateToResult(keyword: keyword)
     }
-  
 }
