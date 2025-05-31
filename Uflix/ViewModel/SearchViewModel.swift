@@ -10,30 +10,41 @@ import RxSwift
 import RxCocoa
 
 class SearchViewModel {
-    // Input
-    // PublishRelay --> 초기값 x, 이벤트 발생(버튼/탭 등)
     let clearAllTapped = PublishRelay<Void>()
     let selectedKeyword = PublishRelay<String>()
+    let query = PublishRelay<String>()
     
-    // Output
-    // BehaviorRelay --> 초기값, 최신값 o, 즉시 전달 (상태 보관)
     var recentSearches = BehaviorRelay<[String]>(value: SearchHistoryManager.load())
+    let suggestions = BehaviorRelay<[String]>(value: [])
+    let error = PublishRelay<Error>()
     
     private let disposeBag = DisposeBag()
     
     init() {
         bindInput()
     }
-
+    
     private func bindInput() {
-        // 전체 삭제
+        query
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .flatMapLatest { keyword in
+                MovieService.searchMovie(query: keyword)
+                    .map { movies in
+                        movies.compactMap { $0.title }
+                    }
+                    .catchAndReturn([])
+            }
+            .observe(on: MainScheduler.instance)
+            .bind(to: suggestions)
+            .disposed(by: disposeBag)
+    
         clearAllTapped
             .subscribe(onNext: {
                 SearchHistoryManager.clear()
                 self.recentSearches.accept([])
             }).disposed(by: disposeBag)
     
-        // 최근 검색어 선택: 히스토리 갱신
         selectedKeyword
             .subscribe(onNext: { keyword in
                 SearchHistoryManager.save(keyword)
