@@ -15,17 +15,19 @@ class SearchViewController: BaseViewController {
     
     private let viewModel = SearchViewModel()
     private let disposeBag = DisposeBag()
+    private let dynamicDisposeBag = DisposeBag() // tableView 바인딩 분리
     
     private let searchBar = UISearchBar()
     private let tableView = UITableView()
     private let headerLabel = UILabel()
     private let clearButton = UIButton(type: .system)
     private let headerView = UIView()
+    private let tapGesture = UITapGestureRecognizer()
     
-    // TODO: 분기 처리 필요
-    enum SearchMode { case recent, suggest }
-    private var mode: SearchMode = .recent {
-        didSet { updateView(for: mode) }
+    private let mode = BehaviorRelay<SearchMode>(value: .recent)
+    enum SearchMode {
+        case recent
+        case suggest
     }
     
     override func viewDidLoad() {
@@ -36,15 +38,17 @@ class SearchViewController: BaseViewController {
     }
     
     private func bind() {
+        tapGesture.rx.event
+            .bind(onNext: { [weak self] _ in
+                self?.view.endEditing(true)
+            }).disposed(by: disposeBag)
+        
         searchBar.rx.text.orEmpty
+            .distinctUntilChanged()
             .bind(onNext: { [weak self] text in
-                guard let self = self else { return }
-                if text.isEmpty {
-                   self.mode = .recent
-               } else {
-                   self.mode = .suggest
-                   // self.viewModel.query.accept(text) 추천 검색어 연동할 경우
-               }
+                let newMode: SearchMode = text.isEmpty ? .recent : .suggest
+                self?.mode.accept(newMode)
+                self?.viewModel.query.accept(text)
             }).disposed(by: disposeBag)
         
         clearButton.rx.tap
@@ -57,28 +61,55 @@ class SearchViewController: BaseViewController {
                 self?.navigateToResult(keyword: keyword)
             }).disposed(by: disposeBag)
         
-        viewModel.recentSearches
-            .bind(to: tableView.rx.items(
-                cellIdentifier: HistoryCell.identifier,
-                cellType: HistoryCell.self
-            )) { _, keyword, cell in
-                cell.configure(with: keyword)
-            }.disposed(by: disposeBag)
+        mode
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] newMode in
+                self?.updateView(for: newMode)
+                self?.bindTableView(for: newMode)
+            }).disposed(by: disposeBag)
+    }
+    
+    private func bindTableView(for mode: SearchMode) {
+        tableView.dataSource = nil
+        tableView.delegate = nil
         
+        let bindingBag = DisposeBag()
+
+        switch mode {
+        case .recent:
+            viewModel.recentSearches
+                .bind(to: tableView.rx.items(cellIdentifier: HistoryCell.identifier, cellType: HistoryCell.self)) { _, keyword, cell in
+                    cell.configure(with: keyword)
+                }.disposed(by: disposeBag)
+        case .suggest:
+            viewModel.suggestions
+                .bind(to: tableView.rx.items(cellIdentifier: SuggestCell.identifier, cellType: SuggestCell.self)) { _, keyword, cell in
+                    cell.configure(with: keyword)
+                }.disposed(by: disposeBag)
+        }
+        
+        // DisposeBag 업데이트
     }
     
     private func navigateToResult(keyword: String) {
-        viewModel.selectedKeyword.accept(keyword)
         let resultVC = SearchResultViewController(keyword: keyword)
         navigationController?.pushViewController(resultVC, animated: true)
     }
-    
+
     private func updateView(for mode: SearchMode) {
-        tableView.isHidden = false
+        switch mode {
+        case .recent:
+            headerView.isHidden = false
+        case .suggest:
+            headerView.isHidden = true
+        }
+        tableView.reloadData()
     }
-    
+
     private func setupUI() {
         view.backgroundColor = .black
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         
         searchBar.placeholder = "영화를 검색해보세요."
         searchBar.barStyle = .black
@@ -89,6 +120,7 @@ class SearchViewController: BaseViewController {
         tableView.backgroundColor = .black
         tableView.separatorStyle = .none
         tableView.register(HistoryCell.self, forCellReuseIdentifier: HistoryCell.identifier)
+        tableView.register(SuggestCell.self, forCellReuseIdentifier: SuggestCell.identifier)
         
         [ searchBar, tableView ].forEach{ view.addSubview($0) }
         
@@ -134,7 +166,6 @@ class SearchViewController: BaseViewController {
 }
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        // TODO: 검색 실시간 suggest
         let keyword = searchBar.text ?? ""
         guard !keyword.isEmpty else { return }
         navigateToResult(keyword: keyword)
