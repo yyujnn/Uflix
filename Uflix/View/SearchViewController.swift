@@ -14,8 +14,9 @@ class SearchViewController: BaseViewController {
     override var hidesNavigationBar: Bool { return true }
     
     private let viewModel = SearchViewModel()
+    private var output: SearchViewModel.Output?
     private let disposeBag = DisposeBag()
-    private let dynamicDisposeBag = DisposeBag() // tableView 바인딩 분리
+    private var cellBindingBag = DisposeBag()
     
     private let searchBar = UISearchBar()
     private let tableView = UITableView()
@@ -23,8 +24,9 @@ class SearchViewController: BaseViewController {
     private let clearButton = UIButton(type: .system)
     private let headerView = UIView()
     private let tapGesture = UITapGestureRecognizer()
-    
+  
     private let mode = BehaviorRelay<SearchMode>(value: .recent)
+    
     enum SearchMode {
         case recent
         case suggest
@@ -34,10 +36,26 @@ class SearchViewController: BaseViewController {
         super.viewDidLoad()
         searchBar.delegate = self
         setupUI()
-        bind()
+        bindViewModel()
+        bindUI()
     }
     
-    private func bind() {
+    private func bindViewModel() {
+        let input = SearchViewModel.Input(
+            query: searchBar.rx.text.orEmpty.asObservable(),
+            clearAllTapped: clearButton.rx.tap.asObservable(),
+            selectedKeyword: tableView.rx.modelSelected(String.self).asObservable())
+        
+        output = viewModel.transform(input: input)
+        
+        output?.selectedKeyword
+            .drive(onNext: { [weak self] keyword in
+                self?.navigateToResult(keyword: keyword)
+            }).disposed(by: disposeBag)
+    }
+    
+    // MARK: - Bind
+    private func bindUI() {
         tapGesture.rx.event
             .bind(onNext: { [weak self] _ in
                 self?.view.endEditing(true)
@@ -48,17 +66,6 @@ class SearchViewController: BaseViewController {
             .bind(onNext: { [weak self] text in
                 let newMode: SearchMode = text.isEmpty ? .recent : .suggest
                 self?.mode.accept(newMode)
-                self?.viewModel.query.accept(text)
-            }).disposed(by: disposeBag)
-        
-        clearButton.rx.tap
-            .bind(to: viewModel.clearAllTapped)
-            .disposed(by: disposeBag)
-        
-        tableView.rx.modelSelected(String.self)
-            .subscribe(onNext: { [weak self] keyword in
-                self?.viewModel.selectedKeyword.accept(keyword)
-                self?.navigateToResult(keyword: keyword)
             }).disposed(by: disposeBag)
         
         mode
@@ -72,23 +79,26 @@ class SearchViewController: BaseViewController {
     private func bindTableView(for mode: SearchMode) {
         tableView.dataSource = nil
         tableView.delegate = nil
+        cellBindingBag = DisposeBag()
         
-        let bindingBag = DisposeBag()
-
         switch mode {
         case .recent:
-            viewModel.recentSearches
-                .bind(to: tableView.rx.items(cellIdentifier: HistoryCell.identifier, cellType: HistoryCell.self)) { _, keyword, cell in
+            output?.recentSearches
+                .drive(tableView.rx.items(
+                    cellIdentifier: HistoryCell.identifier,
+                    cellType: HistoryCell.self
+                )) { _, keyword, cell in
                     cell.configure(with: keyword)
-                }.disposed(by: disposeBag)
+                }.disposed(by: cellBindingBag)
         case .suggest:
-            viewModel.suggestions
-                .bind(to: tableView.rx.items(cellIdentifier: SuggestCell.identifier, cellType: SuggestCell.self)) { _, keyword, cell in
+            output?.suggestions
+                .drive(tableView.rx.items(
+                    cellIdentifier: SuggestCell.identifier,
+                    cellType: SuggestCell.self
+                )) { _, keyword, cell in
                     cell.configure(with: keyword)
-                }.disposed(by: disposeBag)
+                }.disposed(by: cellBindingBag)
         }
-        
-        // DisposeBag 업데이트
     }
     
     private func navigateToResult(keyword: String) {
@@ -97,12 +107,7 @@ class SearchViewController: BaseViewController {
     }
 
     private func updateView(for mode: SearchMode) {
-        switch mode {
-        case .recent:
-            headerView.isHidden = false
-        case .suggest:
-            headerView.isHidden = true
-        }
+        tableView.tableHeaderView = (mode == .recent) ? headerView : nil
         tableView.reloadData()
     }
 
@@ -168,6 +173,9 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let keyword = searchBar.text ?? ""
         guard !keyword.isEmpty else { return }
+        
+        SearchHistoryManager.save(keyword)
+        viewModel.refreshRecentSearches()
         navigateToResult(keyword: keyword)
     }
 }
