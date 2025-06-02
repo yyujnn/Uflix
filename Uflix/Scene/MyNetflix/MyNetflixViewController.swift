@@ -41,6 +41,7 @@ class MyNetflixViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        viewModel.fetchFavorites()
     }
 
     private func createLayout() -> UICollectionViewLayout {
@@ -84,9 +85,18 @@ class MyNetflixViewController: BaseViewController {
     }
     
     private func bind() {
-        // 데이터 바인딩
-        viewModel.favoriteMovies
-            .bind(to: collectionView.rx.items(cellIdentifier: FavoriteMovieCell.identifier, cellType: FavoriteMovieCell.self)) { index, movie, cell in
+        let input = MyNetflixViewModel.Input(
+            editButtonTapped: .empty(),
+            itemSelected: collectionView.rx.modelSelected(FavoriteMovie.self).asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.movies
+            .drive(collectionView.rx.items(
+                cellIdentifier: FavoriteMovieCell.identifier,
+                cellType: FavoriteMovieCell.self
+            )) { index, movie, cell in
                 cell.configure(movie: movie)
             }.disposed(by: disposeBag)
         
