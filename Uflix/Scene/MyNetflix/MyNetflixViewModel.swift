@@ -10,6 +10,9 @@ import RxSwift
 import RxCocoa
 
 class MyNetflixViewModel {
+    let isEditing = BehaviorRelay<Bool>(value: false)
+    let selectedMovieIDs = BehaviorRelay<Set<Int>>(value: [])
+    
     private let disposeBag = DisposeBag()
        
        // CoreData에서 가져온 찜한 영화 목록

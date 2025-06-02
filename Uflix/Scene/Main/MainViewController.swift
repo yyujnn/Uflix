@@ -30,13 +30,13 @@ class MainViewController : BaseViewController {
     }()
     
     private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.id)
-        collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeaderView.id)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.AppColor.background
-        return collectionView
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        cv.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.id)
+        cv.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeaderView.id)
+        cv.delegate = self
+        cv.dataSource = self
+        cv.backgroundColor = UIColor.AppColor.background
+        return cv
     }()
     
     override func viewDidLoad() {
@@ -75,7 +75,6 @@ class MainViewController : BaseViewController {
         
     }
     
-
     private func createLayout() -> UICollectionViewLayout {
         
         // 각 아이템이 각 그룹 내에서 전체 넓이와 전체 높이를 차지. (1.0 = 100%)
