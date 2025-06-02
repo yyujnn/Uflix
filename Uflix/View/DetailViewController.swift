@@ -80,7 +80,7 @@ class DetailViewController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor.AppColor.background
         
         // 스크롤뷰 설정
         view.addSubview(scrollView)
@@ -105,11 +105,11 @@ class DetailViewController: UIViewController {
             $0.left.right.equalToSuperview().inset(20)
         }
         
-        titleLabel.textColor = .white
+        titleLabel.textColor = UIColor.AppColor.textPrimary
         titleLabel.font = .boldSystemFont(ofSize: 24)
         titleLabel.numberOfLines = 0
         
-        overviewLabel.textColor = .lightGray
+        overviewLabel.textColor = UIColor.AppColor.textSecondary
         overviewLabel.font = .systemFont(ofSize: 16)
         overviewLabel.numberOfLines = 0
 
@@ -118,8 +118,8 @@ class DetailViewController: UIViewController {
         posterImageView.clipsToBounds = true
         
         likeButton.setTitle("❤️ 찜하기", for: .normal)
-        likeButton.setTitleColor(.white, for: .normal)
-        likeButton.backgroundColor = .darkGray
+        likeButton.setTitleColor(UIColor.AppColor.textPrimary, for: .normal)
+        likeButton.backgroundColor = UIColor.AppColor.textDisabled
         likeButton.layer.cornerRadius = 8
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
         likeButton.snp.makeConstraints { $0.height.equalTo(44) }

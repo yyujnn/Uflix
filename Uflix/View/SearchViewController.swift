@@ -112,15 +112,23 @@ class SearchViewController: BaseViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor.AppColor.background
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         
         searchBar.placeholder = "영화를 검색해보세요."
         searchBar.barStyle = .black
+        searchBar.searchBarStyle = .minimal
         searchBar.tintColor = .white
         searchBar.searchTextField.textColor = .white
         searchBar.searchTextField.backgroundColor = .darkGray
+        
+        tableView.backgroundColor = UIColor.AppColor.background
+        tableView.separatorStyle = .none
+        tableView.register(HistoryCell.self, forCellReuseIdentifier: HistoryCell.identifier)
+        tableView.register(SuggestCell.self, forCellReuseIdentifier: SuggestCell.identifier)
+        
+        [ searchBar, tableView ].forEach{ view.addSubview($0) }
         
         tableView.backgroundColor = .black
         tableView.separatorStyle = .none

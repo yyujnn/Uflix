@@ -27,12 +27,12 @@ class BaseViewController: UIViewController {
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground() // 투명 비활성화
-        appearance.backgroundColor = .black // 원하는 배경색
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white] // 타이틀 색상
+        appearance.backgroundColor = .clear
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.AppColor.textPrimary]
         
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance // 스크롤 시에도 동일하게 적용
         navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.tintColor = .white // back 버튼 등 tint 색상
+        navigationController?.navigationBar.tintColor = UIColor.AppColor.textPrimary // back 버튼 등 tint 색상
     }
 }

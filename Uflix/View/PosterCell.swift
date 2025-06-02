@@ -14,7 +14,7 @@ class PosterCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .darkGray
+        imageView.backgroundColor = UIColor.AppColor.textDisabled
         imageView.layer.cornerRadius = 10
         return imageView
     }()

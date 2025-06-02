@@ -38,7 +38,7 @@ class SearchResultViewController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor.AppColor.background
         view.addSubview(resultView)
         
         resultView.snp.makeConstraints {

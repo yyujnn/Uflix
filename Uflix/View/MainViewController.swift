@@ -23,7 +23,7 @@ class MainViewController : BaseViewController {
     private let logoLabel: UILabel = {
         let label = UILabel()
         label.text = "NETFLIX"
-        label.textColor = UIColor(red: 229/255, green: 9/255, blue: 20/255, alpha: 1.0)
+        label.textColor = UIColor.AppColor.accentRed
         label.font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 32) ?? UIFont.boldSystemFont(ofSize: 32)
         label.textAlignment = .center
         return label
@@ -35,7 +35,7 @@ class MainViewController : BaseViewController {
         collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeaderView.id)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = UIColor.AppColor.background
         return collectionView
     }()
     
@@ -115,7 +115,7 @@ class MainViewController : BaseViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor.AppColor.background
         [
             logoLabel,
             collectionView

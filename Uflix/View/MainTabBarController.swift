@@ -26,9 +26,9 @@ class MainTabBarController: UITabBarController {
         
         
         // 탭바 스타일
-        tabBar.barTintColor = .black
-        tabBar.tintColor = .white
-        tabBar.unselectedItemTintColor = .lightGray
+        tabBar.barTintColor = UIColor.AppColor.background
+        tabBar.tintColor = UIColor.AppColor.textPrimary
+        tabBar.unselectedItemTintColor = UIColor.AppColor.textDisabled
         tabBar.isTranslucent = false
         
         /// TODO: SearchVC 준비
@@ -36,7 +36,7 @@ class MainTabBarController: UITabBarController {
         let searchNav = UINavigationController(rootViewController: searchVC)
         let myNav = UINavigationController(rootViewController: myVC)
        
-        viewControllers = [homeNav, searchNav, myNav]
+        viewControllers = [searchNav, homeNav, myNav]
     }
 }
 

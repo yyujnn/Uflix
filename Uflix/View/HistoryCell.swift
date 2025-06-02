@@ -23,9 +23,9 @@ class HistoryCell: UITableViewCell {
     }
     
     private func setupUI() {
-        backgroundColor = .black
+        backgroundColor = UIColor.AppColor.background
         
-        titleLabel.textColor = .white
+        titleLabel.textColor = UIColor.AppColor.textPrimary
         titleLabel.font = .systemFont(ofSize: 14)
         
         contentView.addSubview(titleLabel)

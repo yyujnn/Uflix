@@ -27,22 +27,20 @@ class FavoriteMovieCell: UITableViewCell {
     }
     
     private func setupUI() {
-        // 썸네일 이미지
+        contentView.backgroundColor = UIColor.AppColor.background
+
         thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.clipsToBounds = true
         thumbnailImageView.layer.cornerRadius = 6
         
-        // 제목
         titleLabel.font = .boldSystemFont(ofSize: 16)
-        titleLabel.textColor = .label
+        titleLabel.textColor = UIColor.AppColor.textPrimary
         titleLabel.numberOfLines = 1
         
-        // 줄거리
         overviewLabel.font = .systemFont(ofSize: 13)
-        overviewLabel.textColor = .secondaryLabel
+        overviewLabel.textColor = UIColor.AppColor.textSecondary
         overviewLabel.numberOfLines = 2
         
-        // 스택 구성
         let textStack = UIStackView(arrangedSubviews: [titleLabel, overviewLabel])
         textStack.axis = .vertical
         textStack.spacing = 4

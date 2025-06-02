@@ -23,9 +23,9 @@ class SuggestCell: UITableViewCell {
     }
     
     private func setupUI() {
-        backgroundColor = .black
+        backgroundColor = UIColor.AppColor.background
         
-        titleLabel.textColor = .lightGray
+        titleLabel.textColor = UIColor.AppColor.textSecondary
         titleLabel.font = .systemFont(ofSize: 14)
         
         contentView.addSubview(titleLabel)

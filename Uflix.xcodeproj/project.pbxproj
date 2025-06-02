@@ -43,6 +43,7 @@
 		F3FC48912DE9AB8C0040DF9D /* SearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48902DE9AB8C0040DF9D /* SearchResultViewModel.swift */; };
 		F3FC48932DEAD0310040DF9D /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48922DEAD0310040DF9D /* MovieService.swift */; };
 		F3FC48952DEAD5FC0040DF9D /* SuggestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48942DEAD5FC0040DF9D /* SuggestCell.swift */; };
+		F3FC48972DED56360040DF9D /* UIColor+DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48962DED56360040DF9D /* UIColor+DesignSystem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		F3FC48902DE9AB8C0040DF9D /* SearchResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewModel.swift; sourceTree = "<group>"; };
 		F3FC48922DEAD0310040DF9D /* MovieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
 		F3FC48942DEAD5FC0040DF9D /* SuggestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestCell.swift; sourceTree = "<group>"; };
+		F3FC48962DED56360040DF9D /* UIColor+DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+DesignSystem.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 				F3FC486E2DDB2B8B0040DF9D /* CoreDataManager.swift */,
 				F3FC48882DE0594A0040DF9D /* SearchHistoryManager.swift */,
 				F3FC48922DEAD0310040DF9D /* MovieService.swift */,
+				F3FC48982DED56400040DF9D /* Extensions */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -200,6 +203,14 @@
 				F3FC484D2DD46A390040DF9D /* Config.xcconfig */,
 			);
 			path = Config;
+			sourceTree = "<group>";
+		};
+		F3FC48982DED56400040DF9D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F3FC48962DED56360040DF9D /* UIColor+DesignSystem.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +306,7 @@
 				F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */,
 				F3FC48832DDF0F920040DF9D /* BaseViewController.swift in Sources */,
 				F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */,
+				F3FC48972DED56360040DF9D /* UIColor+DesignSystem.swift in Sources */,
 				F3FC486D2DDB2AE60040DF9D /* UFlixModel.xcdatamodeld in Sources */,
 				F3FC48792DDC72BC0040DF9D /* MyNetflixViewController.swift in Sources */,
 				F3FC486F2DDB2B8B0040DF9D /* CoreDataManager.swift in Sources */,

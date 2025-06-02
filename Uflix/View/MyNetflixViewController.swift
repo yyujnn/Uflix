@@ -38,10 +38,11 @@ class MyNetflixViewController: BaseViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.AppColor.background
         
         tableView.register(FavoriteMovieCell.self, forCellReuseIdentifier: FavoriteMovieCell.identifier)
         view.addSubview(tableView)
+        tableView.backgroundColor = UIColor.AppColor.background
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
