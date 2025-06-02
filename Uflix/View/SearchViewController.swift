@@ -123,13 +123,6 @@ class SearchViewController: BaseViewController {
         searchBar.searchTextField.textColor = .white
         searchBar.searchTextField.backgroundColor = .darkGray
         
-        tableView.backgroundColor = UIColor.AppColor.background
-        tableView.separatorStyle = .none
-        tableView.register(HistoryCell.self, forCellReuseIdentifier: HistoryCell.identifier)
-        tableView.register(SuggestCell.self, forCellReuseIdentifier: SuggestCell.identifier)
-        
-        [ searchBar, tableView ].forEach{ view.addSubview($0) }
-        
         tableView.backgroundColor = .black
         tableView.separatorStyle = .none
         tableView.register(HistoryCell.self, forCellReuseIdentifier: HistoryCell.identifier)
@@ -138,7 +131,7 @@ class SearchViewController: BaseViewController {
         [ searchBar, tableView ].forEach{ view.addSubview($0) }
         
         searchBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(-30)
             make.leading.trailing.equalToSuperview()
         }
         

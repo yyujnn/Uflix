@@ -122,7 +122,7 @@ class MainViewController : BaseViewController {
         ].forEach { view.addSubview($0) }
         
         logoLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(-30)
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).inset(10)
         }
         
