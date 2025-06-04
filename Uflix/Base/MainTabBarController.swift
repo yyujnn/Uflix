@@ -36,7 +36,7 @@ class MainTabBarController: UITabBarController {
         let searchNav = UINavigationController(rootViewController: searchVC)
         let myNav = UINavigationController(rootViewController: myVC)
        
-        viewControllers = [searchNav, homeNav, myNav]
+        viewControllers = [homeNav, searchNav, myNav]
     }
 }
 
