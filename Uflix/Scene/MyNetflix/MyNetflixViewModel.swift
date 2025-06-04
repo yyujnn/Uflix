@@ -13,7 +13,6 @@ class MyNetflixViewModel {
     
     struct Input {
         let editButtonTapped: Observable<Void>
-        let itemSelected: Observable<FavoriteMovie>
     }
     
     struct Output {
@@ -40,21 +39,6 @@ class MyNetflixViewModel {
                 self.isEditingRelay.accept(newState)
                 if !newState {
                     self.selectedIDsRelay.accept([])
-                }
-            }).disposed(by: disposeBag)
-       
-        input.itemSelected
-            .subscribe(onNext: { [weak self] movie in
-                guard let self = self else { return }
-                if self.isEditingRelay.value {
-                    var selected = self.selectedIDsRelay.value
-                    let id = Int(movie.id)
-                    if selected.contains(id) {
-                        selected.remove(id)
-                    } else {
-                        selected.insert(id)
-                    }
-                    self.selectedIDsRelay.accept(selected)
                 }
             }).disposed(by: disposeBag)
         
