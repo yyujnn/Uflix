@@ -46,12 +46,15 @@ class MainViewController : BaseViewController {
     }
 
     private func bind() {
+        let input = MainViewModel.Input(fetchTrigger: Observable.just(()))
+    
+        let output = viewModel.transform(input: input)
+        
         Observable
             .combineLatest(
-                viewModel.popularMovieSubject,
-                viewModel.topRatedMovieSubject,
-                viewModel.upcomingMovieSubject
-            )
+                output.popularMovies, 
+                output.topRatedMovies, 
+                output.upcomingMovies)
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] popular, topRated, upcoming in
                 self?.popularMovies = popular
