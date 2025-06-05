@@ -40,7 +40,10 @@ class PosterCell: UICollectionViewCell {
         let urlString = "https://image.tmdb.org/t/p/w500/\(posterPath).jpg"
         guard let url = URL(string: urlString) else { return }
         
-        imageView.kf.setImage(with: url)
+        imageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "grayBox")
+        )
     }
 }
 
