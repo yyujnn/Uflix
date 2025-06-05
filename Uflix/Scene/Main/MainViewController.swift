@@ -46,33 +46,24 @@ class MainViewController : BaseViewController {
     }
 
     private func bind() {
-        viewModel.popularMovieSubject
-            .observe(on: MainScheduler.instance) // UI 메인스레드 작업
-            .subscribe(onNext: { [weak self] movies in
-                self?.popularMovies = movies
-                self?.collectionView.reloadData()
-            }, onError: { error in
-                print("에러 발생: \(error)")
-            }).disposed(by: disposeBag)
+        let input = MainViewModel.Input(fetchTrigger: Observable.just(()))
+    
+        let output = viewModel.transform(input: input)
         
-        viewModel.topRatedMovieSubject
+        Observable
+            .combineLatest(
+                output.popularMovies, 
+                output.topRatedMovies, 
+                output.upcomingMovies)
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] movies in
-                self?.topRatedMovies = movies
-                self?.collectionView.reloadData()
+            .subscribe(onNext: { [weak self] popular, topRated, upcoming in
+                self?.popularMovies = popular
+                self?.topRatedMovies = topRated
+                self?.upcomingMovies = upcoming
+                self?.collectionView.reloadData() // 단 1번만 호출
             }, onError: { error in
                 print("에러 발생: \(error)")
             }).disposed(by: disposeBag)
-        
-        viewModel.upcomingMovieSubject
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] movies in
-                self?.upcomingMovies = movies
-                self?.collectionView.reloadData()
-            }, onError: { error in
-                print("에러 발생: \(error)")
-            }).disposed(by: disposeBag)
-        
     }
     
     private func createLayout() -> UICollectionViewLayout {

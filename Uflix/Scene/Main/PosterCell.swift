@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class PosterCell: UICollectionViewCell {
     static let id = "PosterCell"
@@ -39,15 +40,10 @@ class PosterCell: UICollectionViewCell {
         let urlString = "https://image.tmdb.org/t/p/w500/\(posterPath).jpg"
         guard let url = URL(string: urlString) else { return }
         
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.sync {
-                        self?.imageView.image = image
-                    }
-                }
-            }
-        }
+        imageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "grayBox")
+        )
     }
 }
 
