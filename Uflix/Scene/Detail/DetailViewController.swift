@@ -18,11 +18,11 @@ class DetailViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let stackView = UIStackView()
-    private let posterImageView = UIImageView()
     private let titleLabel = UILabel()
     private let overviewLabel = UILabel()
     private let playerView = YTPlayerView()
     private let likeButton = UIButton(type: .system)
+    private let shareButton = UIButton(type: .system)
     
     init(viewModel: DetailViewModel) {
         self.viewModel = viewModel
@@ -112,10 +112,6 @@ class DetailViewController: UIViewController {
         overviewLabel.textColor = UIColor.AppColor.textSecondary
         overviewLabel.font = .systemFont(ofSize: 16)
         overviewLabel.numberOfLines = 0
-
-        posterImageView.contentMode = .scaleAspectFit
-        posterImageView.layer.cornerRadius = 8
-        posterImageView.clipsToBounds = true
         
         likeButton.setTitle("❤️ 찜하기", for: .normal)
         likeButton.setTitleColor(UIColor.AppColor.textPrimary, for: .normal)
@@ -125,7 +121,7 @@ class DetailViewController: UIViewController {
         likeButton.snp.makeConstraints { $0.height.equalTo(44) }
         
         // stackView에 추가
-        [posterImageView, titleLabel, overviewLabel, playerView, likeButton].forEach {
+        [ titleLabel, overviewLabel, playerView, likeButton].forEach {
             stackView.addArrangedSubview($0)
         }
         
@@ -137,10 +133,5 @@ class DetailViewController: UIViewController {
     private func configure(movie: Movie) {
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
-        
-        if let posterPath = movie.posterPath {
-            let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
-            posterImageView.kf.setImage(with: url)
-        }
     }
 }
