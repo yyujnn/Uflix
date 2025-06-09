@@ -15,6 +15,10 @@ class MainTabBarController: UITabBarController {
         let searchVC = SearchViewController()
         let myVC = MyNetflixViewController(viewModel: MyNetflixViewModel())
         
+        let homeNav = BaseNavigationController(rootViewController: homeVC)
+        let searchNav = BaseNavigationController(rootViewController: searchVC)
+        let myNav = BaseNavigationController(rootViewController: myVC)
+        
         let iconConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .regular)
         let homeImage = UIImage(systemName: "house", withConfiguration: iconConfig)
         let searchImage = UIImage(systemName: "magnifyingglass", withConfiguration: iconConfig)
@@ -24,19 +28,13 @@ class MainTabBarController: UITabBarController {
         searchVC.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 1)
         myVC.tabBarItem = UITabBarItem(title: "My", image: myImage, tag: 2)
         
+        viewControllers = [homeNav, searchNav, myNav]
         
         // 탭바 스타일
         tabBar.barTintColor = UIColor.AppColor.background
         tabBar.tintColor = UIColor.AppColor.textPrimary
         tabBar.unselectedItemTintColor = UIColor.AppColor.textDisabled
         tabBar.isTranslucent = false
-        
-        /// TODO: SearchVC 준비
-        let homeNav = UINavigationController(rootViewController: homeVC)
-        let searchNav = UINavigationController(rootViewController: searchVC)
-        let myNav = UINavigationController(rootViewController: myVC)
-       
-        viewControllers = [homeNav, searchNav, myNav]
     }
 }
 
