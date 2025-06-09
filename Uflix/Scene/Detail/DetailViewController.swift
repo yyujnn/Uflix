@@ -65,7 +65,6 @@ class DetailViewController: UIViewController {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-//        stack.spacing = 8
         return stack
     }()
     
