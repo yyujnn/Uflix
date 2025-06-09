@@ -27,13 +27,45 @@ class DetailViewController: UIViewController {
     private let moreButton = UIButton(type: .system)
     private let overviewContainer = UIView()
     
-    private let likeButton = UIButton(type: .system)
-    private let shareButton = UIButton(type: .system)
+    private let likeButton: UIButton = {
+        let button = UIButton(type: .system)
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "plus")
+        config.title = "찜"
+        config.baseForegroundColor = UIColor.AppColor.textSecondary
+        config.imagePadding = 8
+        config.imagePlacement = .top
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attr in
+            var attr = attr
+            attr.font = .systemFont(ofSize: 12)
+            return attr
+        }
+        button.configuration = config
+        return button
+    }()
+
+    private let shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "square.and.arrow.up")
+        config.title = "공유"
+        config.baseForegroundColor = UIColor.AppColor.textSecondary
+        config.imagePadding = 8
+        config.imagePlacement = .top
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attr in
+            var attr = attr
+            attr.font = .systemFont(ofSize: 12)
+            return attr
+        }
+        button.configuration = config
+        return button
+    }()
+
     private let buttonStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = 12
+//        stack.spacing = 8
         return stack
     }()
     
@@ -78,6 +110,23 @@ class DetailViewController: UIViewController {
         overviewLabel.numberOfLines = isExpanded ? 0 : 3
         moreButton.setTitle(isExpanded ? "간략히" : "더보기", for: .normal)
     }
+    
+    private func updateLikeButton(isFavorite: Bool) {
+        UIView.animate(withDuration: 0.15, animations: {
+            self.likeButton.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        }) { _ in
+            var config = self.likeButton.configuration
+            config?.image = UIImage(
+                systemName: isFavorite ? "checkmark" : "plus",
+                withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+            )
+            self.likeButton.configuration = config
+
+            UIView.animate(withDuration: 0.15) {
+                self.likeButton.transform = .identity
+            }
+        }
+    }
 
     private func bind() {
         viewModel.movieDetail
@@ -89,8 +138,7 @@ class DetailViewController: UIViewController {
         viewModel.isFavorite
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] isFav in
-                let title = isFav ? "❤️ 찜 취소" : "🤍 찜 하기"
-                self?.likeButton.setTitle(title, for: .normal)
+                self?.updateLikeButton(isFavorite: isFav)
             }).disposed(by: disposeBag)
         
         viewModel.trailerKey
@@ -119,6 +167,8 @@ class DetailViewController: UIViewController {
         }
         
         contentView.addSubview(stackView)
+        contentView.addSubview(buttonStackView)
+        
         stackView.axis = .vertical
         stackView.spacing = 16
         stackView.alignment = .fill
@@ -126,7 +176,6 @@ class DetailViewController: UIViewController {
         stackView.snp.makeConstraints {
             $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
             $0.left.right.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().inset(20)
         }
         
         playerView.snp.makeConstraints { $0.height.equalTo(200) }
@@ -156,26 +205,24 @@ class DetailViewController: UIViewController {
             $0.top.equalTo(overviewLabel.snp.bottom).offset(4)
             $0.left.right.bottom.equalToSuperview()
         }
-
-        likeButton.setTitleColor(.white, for: .normal)
-        likeButton.setTitle("🤍 찜 하기", for: .normal)
-        likeButton.backgroundColor = UIColor.AppColor.textDisabled
-        likeButton.layer.cornerRadius = 8
-        likeButton.snp.makeConstraints { $0.height.equalTo(44) }
+        
+        [playerView, titleLabel, overviewContainer].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        
+        buttonStackView.snp.makeConstraints {
+            $0.top.equalTo(stackView.snp.bottom).offset(16)
+            $0.left.equalToSuperview().inset(8)
+            $0.bottom.equalToSuperview().inset(20)
+        }
+        
+        likeButton.snp.makeConstraints {
+            $0.width.height.equalTo(60)
+        }
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
-
-        shareButton.setTitle("📤 공유", for: .normal)
-        shareButton.setTitleColor(.white, for: .normal)
-        shareButton.backgroundColor = UIColor.AppColor.textDisabled
-        shareButton.layer.cornerRadius = 8
-        shareButton.snp.makeConstraints { $0.height.equalTo(44) }
 
         buttonStackView.addArrangedSubview(likeButton)
         buttonStackView.addArrangedSubview(shareButton)
-
-        [playerView, titleLabel, overviewContainer, buttonStackView].forEach {
-            stackView.addArrangedSubview($0)
-        }
     }
 
     private func configure(movie: Movie) {
