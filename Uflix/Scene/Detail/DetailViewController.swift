@@ -23,6 +23,13 @@ class DetailViewController: UIViewController {
     private let playerView = YTPlayerView()
     private let likeButton = UIButton(type: .system)
     private let shareButton = UIButton(type: .system)
+    private let buttonStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.spacing = 12
+        return stack
+    }()
     
     init(viewModel: DetailViewModel) {
         self.viewModel = viewModel
@@ -62,7 +69,7 @@ class DetailViewController: UIViewController {
             .subscribe(onNext: { [weak self] isFav in
                 // 여기 콜백은 언제든 값이 emit 되면 실행
                 // subscribe(...) → "이벤트 받기"
-                let title = isFav ?  "❤️ 찜 취소" : "🤍 찜하기"
+                let title = isFav ?  "❤️ 찜 취소" : "🤍 찜 하기"
                 self?.likeButton.setTitle(title, for: .normal)
             }).disposed(by: disposeBag)
         
@@ -101,9 +108,12 @@ class DetailViewController: UIViewController {
         stackView.distribution = .equalSpacing
         
         stackView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview().inset(20)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
             $0.left.right.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(20)
         }
+        
+        playerView.snp.makeConstraints { $0.height.equalTo(200) }
         
         titleLabel.textColor = UIColor.AppColor.textPrimary
         titleLabel.font = .boldSystemFont(ofSize: 24)
@@ -113,23 +123,26 @@ class DetailViewController: UIViewController {
         overviewLabel.font = .systemFont(ofSize: 16)
         overviewLabel.numberOfLines = 0
         
-        likeButton.setTitle("❤️ 찜하기", for: .normal)
-        likeButton.setTitleColor(UIColor.AppColor.textPrimary, for: .normal)
+        likeButton.setTitleColor(.white, for: .normal)
         likeButton.backgroundColor = UIColor.AppColor.textDisabled
         likeButton.layer.cornerRadius = 8
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
         likeButton.snp.makeConstraints { $0.height.equalTo(44) }
+
+        shareButton.setTitle("📤 공유", for: .normal)
+        shareButton.setTitleColor(.white, for: .normal)
+        shareButton.backgroundColor = UIColor.AppColor.textDisabled
+        shareButton.layer.cornerRadius = 8
+        shareButton.snp.makeConstraints { $0.height.equalTo(44) }
         
-        // stackView에 추가
-        [ titleLabel, overviewLabel, playerView, likeButton].forEach {
+        [playerView, titleLabel, overviewLabel, buttonStackView].forEach {
             stackView.addArrangedSubview($0)
         }
         
-        // playerView 고정 높이
-        playerView.snp.makeConstraints { $0.height.equalTo(200) }
+        buttonStackView.addArrangedSubview(likeButton)
+        buttonStackView.addArrangedSubview(shareButton)
     }
 
-    
     private func configure(movie: Movie) {
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
