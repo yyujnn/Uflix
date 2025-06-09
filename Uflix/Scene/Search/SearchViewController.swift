@@ -11,7 +11,6 @@ import RxCocoa
 import SnapKit
 
 class SearchViewController: BaseViewController {
-    override var hidesNavigationBar: Bool { return true }
     
     private let viewModel = SearchViewModel()
     private var output: SearchViewModel.Output?
@@ -131,7 +130,7 @@ class SearchViewController: BaseViewController {
         [ searchBar, tableView ].forEach{ view.addSubview($0) }
         
         searchBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(-30)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
         }
         

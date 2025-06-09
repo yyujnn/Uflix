@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 
 class MyNetflixViewController: BaseViewController {
-    override var hidesNavigationBar: Bool { return true }
     
     private let viewModel: MyNetflixViewModel
     private let disposeBag = DisposeBag()
@@ -60,7 +59,6 @@ class MyNetflixViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         viewModel.fetchFavorites()
     }
 
@@ -100,7 +98,7 @@ class MyNetflixViewController: BaseViewController {
         }
      
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(-30)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.equalToSuperview().inset(16)
         }
         

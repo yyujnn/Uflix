@@ -12,8 +12,7 @@ import AVKit
 import AVFoundation
 
 class MainViewController : BaseViewController {
-    override var hidesNavigationBar: Bool { return true }
-
+    
     private let viewModel = MainViewModel()
     private let disposeBag = DisposeBag()
     private var popularMovies = [Movie]()
@@ -67,8 +66,6 @@ class MainViewController : BaseViewController {
     }
     
     private func createLayout() -> UICollectionViewLayout {
-        
-        // 각 아이템이 각 그룹 내에서 전체 넓이와 전체 높이를 차지. (1.0 = 100%)
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
@@ -112,7 +109,7 @@ class MainViewController : BaseViewController {
         ].forEach { view.addSubview($0) }
         
         logoLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(-30)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).inset(10)
         }
         
