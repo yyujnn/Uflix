@@ -57,6 +57,17 @@ class DetailViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         viewModel.checkFavoriteStatus()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    
+        guard !isExpanded else {
+            moreButton.isHidden = false
+           return
+        }
+        
+        moreButton.isHidden = !overviewLabel.isTruncated
+    }
 
     @objc private func didTapLike() {
         viewModel.toggleFavorite()
@@ -170,5 +181,15 @@ class DetailViewController: UIViewController {
     private func configure(movie: Movie) {
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
+    }
+}
+
+extension UILabel {
+    var isTruncated: Bool {
+        guard let text = self.text else { return false }
+        let size = CGSize(width: bounds.width, height: .greatestFiniteMagnitude)
+        let attributes: [NSAttributedString.Key: Any] = [.font: font as Any]
+        let rect = text.boundingRect(with: size, options: [.usesLineFragmentOrigin], attributes: attributes, context: nil)
+        return rect.height > bounds.height
     }
 }
