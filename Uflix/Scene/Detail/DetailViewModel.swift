@@ -14,9 +14,8 @@ class DetailViewModel {
     private let movie: Movie
 
     let movieDetail: BehaviorSubject<Movie>
-    let trailerKey = PublishSubject<String>()
+    let trailerKey = ReplaySubject<String>.create(bufferSize: 1)
     let error = PublishSubject<Error>()
-//    let isFavorite: BehaviorSubject<Bool>
     let isFavorite = BehaviorSubject<Bool>(value: false)
     
     init(movie: Movie) {
@@ -64,14 +63,16 @@ class DetailViewModel {
                 if let trailer = response.results.first(where: { $0.type == "Trailer" && $0.site
                     == "YouTube"}),
                    let key = trailer.key {
+                    print("✅ 예고편 찾음:", key)
                     return Single.just(key)
                 } else {
+                    print("❌ 예고편 없음")
                     return Single.error(NetworkError.dataFetchFail) }
             }
             .subscribe(onSuccess: { [weak self] key in
                 self?.trailerKey.onNext(key)
             }, onFailure: { [weak self] error in
-                self?.error.onNext(error)
+                self?.trailerKey.onError(error)
             }).disposed(by: disposeBag)
     }
 }

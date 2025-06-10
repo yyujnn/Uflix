@@ -44,6 +44,7 @@
 		F3FC48932DEAD0310040DF9D /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48922DEAD0310040DF9D /* MovieService.swift */; };
 		F3FC48952DEAD5FC0040DF9D /* SuggestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48942DEAD5FC0040DF9D /* SuggestCell.swift */; };
 		F3FC48972DED56360040DF9D /* UIColor+DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48962DED56360040DF9D /* UIColor+DesignSystem.swift */; };
+		F3FC48A62DF6B62A0040DF9D /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3FC48A52DF6B62A0040DF9D /* BaseNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +83,7 @@
 		F3FC48922DEAD0310040DF9D /* MovieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
 		F3FC48942DEAD5FC0040DF9D /* SuggestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestCell.swift; sourceTree = "<group>"; };
 		F3FC48962DED56360040DF9D /* UIColor+DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+DesignSystem.swift"; sourceTree = "<group>"; };
+		F3FC48A52DF6B62A0040DF9D /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				F3FC48822DDF0F920040DF9D /* BaseViewController.swift */,
+				F3FC48A52DF6B62A0040DF9D /* BaseNavigationController.swift */,
 				F3FC48802DDEFCD70040DF9D /* MainTabBarController.swift */,
 			);
 			path = Base;
@@ -336,6 +339,7 @@
 				F3FC48672DD9F3CC0040DF9D /* DetailViewController.swift in Sources */,
 				F3FC488B2DE064A10040DF9D /* HistoryCell.swift in Sources */,
 				F33B71AD2D919D0600A49099 /* YoutubeViewController.swift in Sources */,
+				F3FC48A62DF6B62A0040DF9D /* BaseNavigationController.swift in Sources */,
 				F3FC48832DDF0F920040DF9D /* BaseViewController.swift in Sources */,
 				F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */,
 				F3FC48972DED56360040DF9D /* UIColor+DesignSystem.swift in Sources */,
