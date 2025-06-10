@@ -17,6 +17,7 @@ class DetailViewController: UIViewController {
     
     private var isExpanded = false
     private var didCheckOverviewLines = false
+    private var fallbackImageURL: URL?
 
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -149,15 +150,20 @@ class DetailViewController: UIViewController {
         viewModel.trailerKey
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] key in
-                print("🎬 key emit:", key)
                 self?.fallbackImageView.isHidden = true
                 self?.noVideoLabel.isHidden = true
                 self?.playerView.load(withVideoId: key)
             }, onError: { [weak self] error in
-                print("error:", error)
-                self?.playerView.isHidden = true
-                self?.fallbackImageView.isHidden = false
-                self?.noVideoLabel.isHidden = false
+                guard let self else { return }
+                self.playerView.isHidden = true
+                self.fallbackImageView.isHidden = false
+                self.noVideoLabel.isHidden = false
+        
+                if let url = self.fallbackImageURL {
+                    self.fallbackImageView.kf.setImage(with: url) { _ in
+                        self.fallbackImageView.alpha = 0.6
+                    }
+                }
             }).disposed(by: disposeBag)
 
         
@@ -281,10 +287,7 @@ class DetailViewController: UIViewController {
         overviewLabel.text = movie.overview
         
         if let posterPath = movie.posterPath {
-            let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
-            fallbackImageView.kf.setImage(with: url) { [weak self] _ in
-                self?.fallbackImageView.alpha = 0.6
-            }
+            fallbackImageURL = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
         }
     }
 }
