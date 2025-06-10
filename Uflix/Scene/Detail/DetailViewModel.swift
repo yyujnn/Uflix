@@ -72,7 +72,7 @@ class DetailViewModel {
             .subscribe(onSuccess: { [weak self] key in
                 self?.trailerKey.onNext(key)
             }, onFailure: { [weak self] error in
-                self?.error.onNext(error)
+                self?.trailerKey.onError(error)
             }).disposed(by: disposeBag)
     }
 }
