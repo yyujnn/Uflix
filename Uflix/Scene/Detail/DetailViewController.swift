@@ -150,14 +150,14 @@ class DetailViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] key in
                 print("🎬 key emit:", key)
-                self?.playerView.isHidden = false
                 self?.fallbackImageView.isHidden = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self?.playerView.load(withVideoId: key)
-                }
+                self?.noVideoLabel.isHidden = true
+                self?.playerView.load(withVideoId: key)
             }, onError: { [weak self] error in
+                print("error:", error)
                 self?.playerView.isHidden = true
                 self?.fallbackImageView.isHidden = false
+                self?.noVideoLabel.isHidden = false
             }).disposed(by: disposeBag)
 
         
@@ -194,12 +194,23 @@ class DetailViewController: UIViewController {
 
         videoContainerView.addSubview(playerView)
         videoContainerView.addSubview(fallbackImageView)
+        videoContainerView.addSubview(noVideoLabel)
         
         playerView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
         fallbackImageView.contentMode = .scaleAspectFill
         fallbackImageView.clipsToBounds = true
         fallbackImageView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        
+        noVideoLabel.text = "예고편을 불러올 수 없습니다"
+        noVideoLabel.textColor = .white
+        noVideoLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        noVideoLabel.textAlignment = .center
+
+        noVideoLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.left.right.equalToSuperview().inset(16)
+        }
         
         stackView.axis = .vertical
         stackView.spacing = 16
@@ -261,7 +272,9 @@ class DetailViewController: UIViewController {
         
         if let posterPath = movie.posterPath {
             let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
-            fallbackImageView.kf.setImage(with: url)
+            fallbackImageView.kf.setImage(with: url) { [weak self] _ in
+                self?.fallbackImageView.alpha = 0.6
+            }
         }
     }
 }
