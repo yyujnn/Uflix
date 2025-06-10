@@ -170,7 +170,6 @@ class DetailViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = UIColor.AppColor.background
-
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
@@ -180,9 +179,13 @@ class DetailViewController: UIViewController {
             $0.width.equalTo(scrollView.snp.width)
         }
         
+        setupVideoSection()
+        setupStackView()
+        setupButtons()
+    }
+    
+    private func setupVideoSection() {
         contentView.addSubview(videoContainerView)
-        contentView.addSubview(stackView)
-        contentView.addSubview(buttonStackView)
         
         videoContainerView.clipsToBounds = true
         videoContainerView.layer.cornerRadius = 8
@@ -191,53 +194,59 @@ class DetailViewController: UIViewController {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(220)
         }
-
-        videoContainerView.addSubview(playerView)
-        videoContainerView.addSubview(fallbackImageView)
-        videoContainerView.addSubview(noVideoLabel)
         
+        videoContainerView.addSubview(playerView)
         playerView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
+        videoContainerView.addSubview(fallbackImageView)
         fallbackImageView.contentMode = .scaleAspectFill
         fallbackImageView.clipsToBounds = true
         fallbackImageView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
+        videoContainerView.addSubview(noVideoLabel)
         noVideoLabel.text = "예고편을 불러올 수 없습니다"
         noVideoLabel.textColor = .white
         noVideoLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         noVideoLabel.textAlignment = .center
-
         noVideoLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.left.right.equalToSuperview().inset(16)
         }
+    }
+    
+    private func setupStackView() {
+        contentView.addSubview(stackView)
         
         stackView.axis = .vertical
         stackView.spacing = 16
         stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.snp.makeConstraints {
-            $0.top.equalTo(playerView.snp.bottom).offset(16)
+            $0.top.equalTo(videoContainerView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview().inset(20)
         }
         
         titleLabel.font = .boldSystemFont(ofSize: 24)
         titleLabel.numberOfLines = 0
         titleLabel.textColor = UIColor.AppColor.textPrimary
-
+        
+        stackView.addArrangedSubview(titleLabel)
+    }
+    
+    private func setupButtons() {
         overviewLabel.font = .systemFont(ofSize: 16)
         overviewLabel.textColor = UIColor.AppColor.textSecondary
         overviewLabel.numberOfLines = 3
-
+        
         moreButton.setTitle("더보기", for: .normal)
-        moreButton.setTitleColor( UIColor.AppColor.textDisabled, for: .normal)
+        moreButton.setTitleColor(UIColor.AppColor.textDisabled, for: .normal)
         moreButton.titleLabel?.font = .systemFont(ofSize: 14)
         moreButton.contentHorizontalAlignment = .right
         moreButton.addTarget(self, action: #selector(toggleOverview), for: .touchUpInside)
-
+        
         overviewContainer.addSubview(overviewLabel)
         overviewContainer.addSubview(moreButton)
-
+        
         overviewLabel.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
         }
@@ -247,9 +256,9 @@ class DetailViewController: UIViewController {
             $0.left.right.bottom.equalToSuperview()
         }
         
-        [titleLabel, overviewContainer].forEach {
-            stackView.addArrangedSubview($0)
-        }
+        stackView.addArrangedSubview(overviewContainer)
+        
+        contentView.addSubview(buttonStackView)
         
         buttonStackView.snp.makeConstraints {
             $0.top.equalTo(stackView.snp.bottom).offset(16)
@@ -260,8 +269,9 @@ class DetailViewController: UIViewController {
         likeButton.snp.makeConstraints {
             $0.width.height.equalTo(60)
         }
+        
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
-
+        
         buttonStackView.addArrangedSubview(likeButton)
         buttonStackView.addArrangedSubview(shareButton)
     }
