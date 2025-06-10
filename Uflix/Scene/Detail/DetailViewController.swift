@@ -20,7 +20,13 @@ class DetailViewController: UIViewController {
 
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    
+    private let videoContainerView = UIView()
     private let playerView = YTPlayerView()
+    private let fallbackImageView = UIImageView()
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private let noVideoLabel = UILabel()
+    
     private let stackView = UIStackView()
     private let titleLabel = UILabel()
     private let overviewLabel = UILabel()
@@ -143,8 +149,17 @@ class DetailViewController: UIViewController {
         viewModel.trailerKey
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] key in
-                self?.playerView.load(withVideoId: key)
+                print("🎬 key emit:", key)
+                self?.playerView.isHidden = false
+                self?.fallbackImageView.isHidden = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self?.playerView.load(withVideoId: key)
+                }
+            }, onError: { [weak self] error in
+                self?.playerView.isHidden = true
+                self?.fallbackImageView.isHidden = false
             }).disposed(by: disposeBag)
+
         
         viewModel.error
             .observe(on: MainScheduler.instance)
@@ -165,19 +180,35 @@ class DetailViewController: UIViewController {
             $0.width.equalTo(scrollView.snp.width)
         }
         
+        contentView.addSubview(videoContainerView)
         contentView.addSubview(stackView)
         contentView.addSubview(buttonStackView)
+        
+        videoContainerView.clipsToBounds = true
+        videoContainerView.layer.cornerRadius = 8
+        videoContainerView.snp.makeConstraints {
+            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(220)
+        }
+
+        videoContainerView.addSubview(playerView)
+        videoContainerView.addSubview(fallbackImageView)
+        
+        playerView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        
+        fallbackImageView.contentMode = .scaleAspectFill
+        fallbackImageView.clipsToBounds = true
+        fallbackImageView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
         stackView.axis = .vertical
         stackView.spacing = 16
         stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.snp.makeConstraints {
-            $0.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
+            $0.top.equalTo(playerView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview().inset(20)
         }
-        
-        playerView.snp.makeConstraints { $0.height.equalTo(200) }
         
         titleLabel.font = .boldSystemFont(ofSize: 24)
         titleLabel.numberOfLines = 0
@@ -205,7 +236,7 @@ class DetailViewController: UIViewController {
             $0.left.right.bottom.equalToSuperview()
         }
         
-        [playerView, titleLabel, overviewContainer].forEach {
+        [titleLabel, overviewContainer].forEach {
             stackView.addArrangedSubview($0)
         }
         
@@ -227,6 +258,11 @@ class DetailViewController: UIViewController {
     private func configure(movie: Movie) {
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
+        
+        if let posterPath = movie.posterPath {
+            let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
+            fallbackImageView.kf.setImage(with: url)
+        }
     }
 }
 
