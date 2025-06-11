@@ -17,6 +17,7 @@ class DetailViewModel {
         let movieDetail: Observable<Movie>
         let isFavorite: Observable<Bool>
         let trailerKey: Observable<String>
+        let likeButtonState: Observable<LikeButtonState>
         let error: Observable<Error>
     }
     
@@ -43,10 +44,15 @@ class DetailViewModel {
                 self?.toggleFavorite(current)
             }).disposed(by: disposeBag)
         
+        let likeButtonState = isFavoriteSubject
+            .map { $0 ? LikeButtonState.liked : LikeButtonState.unliked }
+            .asObservable()
+        
         return Output(
             movieDetail: movieDetailSubject.asObservable(),
             isFavorite: isFavoriteSubject.asObservable(),
             trailerKey: trailerKeySubject.asObservable(),
+            likeButtonState: likeButtonState,
             error: errorSubject.asObservable()
         )
     }
@@ -96,5 +102,17 @@ class DetailViewModel {
                 self?.trailerKeySubject.onError(error)
                 self?.errorSubject.onNext(error)
             }).disposed(by: disposeBag)
+    }
+}
+enum LikeButtonState {
+    case liked
+    case unliked
+    
+    var isLiked: Bool {
+        return self == .liked
+    }
+    
+    var imageName: String {
+        return isLiked ? "checkmark" : "plus"
     }
 }

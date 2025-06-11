@@ -113,13 +113,13 @@ class DetailViewController: UIViewController {
         moreButton.setTitle(isExpanded ? "간략히" : "더보기", for: .normal)
     }
     
-    private func updateLikeButton(isFavorite: Bool) {
+    private func updateLikeButton(imageName: String) {
         UIView.animate(withDuration: 0.15, animations: {
             self.likeButton.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }) { _ in
             var config = self.likeButton.configuration
             config?.image = UIImage(
-                systemName: isFavorite ? "checkmark" : "plus",
+                systemName: imageName,
                 withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
             )
             self.likeButton.configuration = config
@@ -129,7 +129,7 @@ class DetailViewController: UIViewController {
             }
         }
     }
-
+    
     private func bind() {
         let input = DetailViewModel.Input(
             toggleFavoriteTapped: likeButton.rx.tap.asObservable()
@@ -142,10 +142,11 @@ class DetailViewController: UIViewController {
             .bind(onNext: { [weak self] in self?.configure(movie: $0) })
             .disposed(by: disposeBag)
         
-        output.isFavorite
+        output.likeButtonState
             .observe(on: MainScheduler.instance)
-            .bind(onNext: { [weak self] in self?.updateLikeButton(isFavorite: $0) })
-            .disposed(by: disposeBag)
+            .bind(onNext: { [weak self] state in
+                self?.updateLikeButton(imageName: state.imageName)
+            }).disposed(by: disposeBag)
         
         output.trailerKey
             .observe(on: MainScheduler.instance)
