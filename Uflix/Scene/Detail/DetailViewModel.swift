@@ -59,6 +59,7 @@ class DetailViewModel {
     
     func checkFavoriteStatus() {
         let current = CoreDataManager.shared.isFavorite(id: movie.id)
+        if let previous = try? isFavoriteSubject.value(), previous == current { return }
         isFavoriteSubject.onNext(current)
     }
     
