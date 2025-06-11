@@ -9,44 +9,65 @@ import Foundation
 import RxSwift
 
 class DetailViewModel {
+    struct Input {
+        let toggleFavoriteTapped: Observable<Void>
+    }
+    
+    struct Output {
+        let movieDetail: Observable<Movie>
+        let isFavorite: Observable<Bool>
+        let trailerKey: Observable<String>
+        let error: Observable<Error>
+    }
     
     private let disposeBag = DisposeBag()
     private let movie: Movie
-
-    let movieDetail: BehaviorSubject<Movie>
-    let trailerKey = ReplaySubject<String>.create(bufferSize: 1)
-    let error = PublishSubject<Error>()
-    let isFavorite = BehaviorSubject<Bool>(value: false)
+    
+    let movieDetailSubject: BehaviorSubject<Movie>
+    let trailerKeySubject = ReplaySubject<String>.create(bufferSize: 1)
+    let errorSubject = PublishSubject<Error>()
+    let isFavoriteSubject = BehaviorSubject<Bool>(value: false)
+    
     
     init(movie: Movie) {
         self.movie = movie
-        self.movieDetail = BehaviorSubject(value: movie)
+        self.movieDetailSubject = BehaviorSubject(value: movie)
         checkFavoriteStatus()
         fetchTrailerKey()
+    }
+
+    func transform(input: Input) -> Output {
+        input.toggleFavoriteTapped
+            .withLatestFrom(isFavoriteSubject)
+            .subscribe(onNext: { [weak self] current in
+                self?.toggleFavorite(current)
+            }).disposed(by: disposeBag)
+        
+        return Output(
+            movieDetail: movieDetailSubject.asObservable(),
+            isFavorite: isFavoriteSubject.asObservable(),
+            trailerKey: trailerKeySubject.asObservable(),
+            error: errorSubject.asObservable()
+        )
     }
     
     func checkFavoriteStatus() {
         let current = CoreDataManager.shared.isFavorite(id: movie.id)
-        isFavorite.onNext(current)
+        isFavoriteSubject.onNext(current)
     }
     
-    func toggleFavorite() {
+    func toggleFavorite(_ current: Bool) {
         let id = movie.id
-        let current = (try? isFavorite.value()) ?? false
-        
         if current {
             CoreDataManager.shared.deleteFavorite(id: id)
-            isFavorite.onNext(false)
-            // onNext(...) → "이벤트 발생"
+            isFavoriteSubject.onNext(false)
         } else {
             CoreDataManager.shared.saveFavorite(movie: movie)
-            isFavorite.onNext(true)
+            isFavoriteSubject.onNext(true)
         }
         
-        // 확인 log
         let all = CoreDataManager.shared.fetchFavorites()
         print("✅ 저장된 찜 목록 개수: \(all.count)")
-        all.forEach{ print("찜 영화: \($0.title ?? "제목 없음")")}
     }
     
     /// 예고편 영상 key
@@ -54,7 +75,7 @@ class DetailViewModel {
         let movieId = movie.id
         let urlString = "https://api.themoviedb.org/3/movie/\(movieId)/videos?api_key=\(APIKeys.tmdb)"
         guard let url = URL(string: urlString) else {
-            error.onNext(NetworkError.invalidUrl)
+            errorSubject.onNext(NetworkError.invalidUrl)
             return
         }
         
@@ -70,9 +91,10 @@ class DetailViewModel {
                     return Single.error(NetworkError.dataFetchFail) }
             }
             .subscribe(onSuccess: { [weak self] key in
-                self?.trailerKey.onNext(key)
+                self?.trailerKeySubject.onNext(key)
             }, onFailure: { [weak self] error in
-                self?.trailerKey.onError(error)
+                self?.trailerKeySubject.onError(error)
+                self?.errorSubject.onNext(error)
             }).disposed(by: disposeBag)
     }
 }
