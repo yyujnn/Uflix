@@ -65,20 +65,19 @@ class MyNetflixViewController: BaseViewController {
     private func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0 / 3),
-            heightDimension: .estimated(180)
+            heightDimension: .fractionalWidth(1.0 / 3 * 1.8)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(180)
+            heightDimension: itemSize.heightDimension
         )
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
-            repeatingSubitem: item,
-            count: 3
+            subitems: [item]
         )
         
         group.interItemSpacing = .fixed(10)

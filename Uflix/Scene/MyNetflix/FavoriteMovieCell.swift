@@ -71,7 +71,7 @@ class FavoriteMovieCell: UICollectionViewCell {
         
         imageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(imageView.snp.width).multipliedBy(1.5) // 2:3 비율
+            $0.height.equalTo(imageView.snp.width).multipliedBy(1.5)
         }
         
         titleLabel.snp.makeConstraints {
