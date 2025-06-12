@@ -90,8 +90,10 @@ class FavoriteMovieCell: UICollectionViewCell {
         }
     }
     
-    func configure(movie: FavoriteMovie) {
+    func configure(movie: FavoriteMovie, isEditing: Bool, isSelected: Bool) {
         titleLabel.text = movie.title
+        self.isEditing = isEditing
+        self.isSelected = isSelected
         
         if let path = movie.posterPath {
             let url = URL(string: "https://image.tmdb.org/t/p/w500\(path)")
@@ -102,6 +104,7 @@ class FavoriteMovieCell: UICollectionViewCell {
         
         updateCheckUI()
     }
+
     
     private func updateCheckUI() {
         let show = isEditing && isSelected
