@@ -56,29 +56,23 @@ class MyNetflixViewController: BaseViewController {
         setupUI()
         bind()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.fetchFavorites()
-    }
 
     private func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0 / 3),
-            heightDimension: .estimated(180)
+            heightDimension: .fractionalWidth(1.0 / 3 * 1.8)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(180)
+            heightDimension: itemSize.heightDimension
         )
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
-            repeatingSubitem: item,
-            count: 3
+            subitems: [item]
         )
         
         group.interItemSpacing = .fixed(10)
@@ -136,95 +130,91 @@ class MyNetflixViewController: BaseViewController {
     
     private func bind() {
         let input = MyNetflixViewModel.Input(
-            editButtonTapped: editButton.rx.tap.asObservable()
+            viewWillAppearTrigger: rx.methodInvoked(#selector(viewWillAppear(_:))).map { _ in },
+            editButtonTapped: editButton.rx.tap.asObservable(),
+            doneButtonTapped: doneButton.rx.tap.asObservable(),
+            deleteButtonTapped: deleteButton.rx.tap.asObservable(),
+            itemSelected: collectionView.rx.itemSelected.asObservable(),
+            itemDeselected: collectionView.rx.itemDeselected.asObservable()
         )
         
         let output = viewModel.transform(input: input)
         
-        // 버튼 이벤트 처리
-        editButton.rx.tap
-            .bind(onNext: { [weak self] in
-                self?.editButton.isHidden = true
-                self?.editStackView.isHidden = false
-                self?.viewModel.isEditingRelay.accept(true)
-            }).disposed(by: disposeBag)
-        
-        doneButton.rx.tap
-            .bind(onNext: { [weak self] in
-                guard let self = self else { return }
-                self.editStackView.isHidden = true
-                self.editButton.isHidden = false
-                self.viewModel.isEditingRelay.accept(false)
-                self.viewModel.selectedIDsRelay.accept([])
-                
-                // 셀 선택 해제
-                for indexPath in self.collectionView.indexPathsForSelectedItems ?? [] {
-                    self.collectionView.deselectItem(at: indexPath, animated: false)
-                }
-            })
-            .disposed(by: disposeBag)
-        
-        // todo: 삭제 alert
-        deleteButton.rx.tap
-            .withLatestFrom(viewModel.selectedIDsRelay.asObservable())
-            .bind(onNext: { [weak self] selectedIDs in
-                guard let self = self else { return }
-                let moviesToDelete = self.viewModel.allMovies.value.filter {
-                    selectedIDs.contains(Int($0.id))
-                }
-                moviesToDelete.forEach {
-                    self.viewModel.deleteFavorite($0)
-                }
-                self.viewModel.selectedIDsRelay.accept([])
-            })
-            .disposed(by: disposeBag)
-        
-        output.isEditing
-            .drive(onNext: { [weak self] _ in
-                self?.collectionView.reloadData()
-            })
-            .disposed(by: disposeBag)
-        
+        // 1. 영화 목록 바인딩
         output.movies
             .drive(collectionView.rx.items(
                 cellIdentifier: FavoriteMovieCell.identifier,
                 cellType: FavoriteMovieCell.self
-            )) { [weak self] index, movie, cell in
-                cell.configure(movie: movie)
-                cell.isEditing = self?.viewModel.isEditingRelay.value ?? false
-            }.disposed(by: disposeBag)
+            )) { index, movie, cell in
+                cell.configure(movie: movie, isEditing: false, isSelected: false)
+            }
+            .disposed(by: disposeBag)
         
-        collectionView.rx.itemSelected
-            .subscribe(onNext: { [weak self] indexPath in
+        // 2. 편집 모드 상태 → 버튼 UI 전환 및 reloadData
+        output.isEditing
+            .drive(onNext: { [weak self] isEditing in
+                guard let self = self else { return }
+                self.editButton.isHidden = isEditing
+                self.editStackView.isHidden = !isEditing
+                self.collectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        
+        // 3. 선택된 셀만 reload → check 표시 반영
+        Observable
+            .combineLatest(output.movies.asObservable(), output.selectedIDs.asObservable(), output.isEditing.asObservable())
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] movies, selectedIDs, isEditing in
                 guard let self = self else { return }
                 
-                let movie = self.viewModel.allMovies.value[indexPath.item]
-                
-                if self.viewModel.isEditingRelay.value {
-                    var selected = self.viewModel.selectedIDsRelay.value
-                    selected.insert(Int(movie.id))
-                    self.viewModel.selectedIDsRelay.accept(selected)
+                for (index, movie) in movies.enumerated() {
+                    let indexPath = IndexPath(item: index, section: 0)
+                    guard let cell = self.collectionView.cellForItem(at: indexPath) as? FavoriteMovieCell else { continue }
                     
-                    print("✅ 선택된 셀: \(movie.title ?? "제목 없음") (id: \(movie.id))")
-                    print("📌 현재 selectedIDsRelay: \(selected)")
-                } else {
-                    self.navigateToDetail(for: movie)
-                    self.collectionView.deselectItem(at: indexPath, animated: false)
+                    let isSelected = selectedIDs.contains(Int(movie.id))
+                    cell.configure(movie: movie, isEditing: isEditing, isSelected: isSelected)
+                    
+                    if isSelected {
+                        print("✅ 선택된 셀: \(movie.title ?? "제목 없음") (id: \(movie.id))")
+                    }
+                    let selectedMovies = movies.filter { selectedIDs.contains(Int($0.id)) }
+                    print("❗️ 선택된 셀 전체 (\(selectedMovies.count)개):")
+                    selectedMovies.forEach { movie in
+                        print("• \(movie.title ?? "제목 없음")")
+                    }
                 }
             })
             .disposed(by: disposeBag)
-        
-        collectionView.rx.itemDeselected
-            .subscribe(onNext: { [weak self] indexPath in
-                guard let self = self else { return }
-                let movie = self.viewModel.allMovies.value[indexPath.item]
-                let id = Int(movie.id)
-                var selected = self.viewModel.selectedIDsRelay.value
-                selected.remove(id)
-                self.viewModel.selectedIDsRelay.accept(selected)
+       
+        output.showDeleteAlert
+            .emit(onNext: { [weak self] in
+                self?.showDeleteConfirmationAlert()
             })
             .disposed(by: disposeBag)
+
+        output.selectedMovie
+            .emit(onNext: { [weak self] movie in
+                self?.navigateToDetail(for: movie)
+            })
+            .disposed(by: disposeBag)
+        
     }
+    
+    private func showDeleteConfirmationAlert() {
+        let alert = UIAlertController(
+            title: "정말 삭제하시겠어요?",
+            message: "선택한 영화들이 삭제됩니다.",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive, handler: { [weak self] _ in
+            self?.viewModel.performDeletion()
+        }))
+
+        present(alert, animated: true, completion: nil)
+    }
+
     
     private func navigateToDetail(for movie: FavoriteMovie) {
         let model = Movie(
