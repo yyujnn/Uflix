@@ -12,50 +12,108 @@ import RxCocoa
 class MyNetflixViewModel {
     
     struct Input {
+        let viewWillAppearTrigger: Observable<Void>
         let editButtonTapped: Observable<Void>
+        let doneButtonTapped: Observable<Void>
+        let deleteButtonTapped: Observable<Void>
+        let itemSelected: Observable<IndexPath>
+        let itemDeselected: Observable<IndexPath>
     }
     
     struct Output {
         let movies: Driver<[FavoriteMovie]>
         let isEditing: Driver<Bool>
         let selectedIDs: Driver<Set<Int>>
+        let selectedMovie: Signal<FavoriteMovie>
     }
-    
-    let allMovies = BehaviorRelay<[FavoriteMovie]>(value: [])
-    let isEditingRelay = BehaviorRelay<Bool>(value: false)
-    let selectedIDsRelay = BehaviorRelay<Set<Int>>(value: [])
-    
+
+    // MARK: - State
+    private let allMoviesRelay = BehaviorRelay<[FavoriteMovie]>(value: [])
+    private let isEditingRelay = BehaviorRelay<Bool>(value: false)
+    private let selectedIDsRelay = BehaviorRelay<Set<Int>>(value: [])
+    private let selectedMovieRelay = PublishRelay<FavoriteMovie>()
+
+
     private let disposeBag = DisposeBag()
     
-    init() {
-        fetchFavorites()
-    }
-    
     func transform(input: Input) -> Output {
-        input.editButtonTapped
-            .subscribe(onNext: {[weak self] in
-                guard let self = self else { return }
-                let newState = !self.isEditingRelay.value
-                self.isEditingRelay.accept(newState)
-                if !newState {
-                    self.selectedIDsRelay.accept([])
-                }
-            }).disposed(by: disposeBag)
         
+        // 화면 진입 시 찜 목록 로딩
+        input.viewWillAppearTrigger
+            .subscribe(onNext: { [weak self] in
+                self?.fetchFavorites()
+            })
+            .disposed(by: disposeBag)
+
+        // 편집 버튼 → 편집모드 ON
+        input.editButtonTapped
+            .subscribe(onNext: { [weak self] in
+                self?.isEditingRelay.accept(true)
+            })
+            .disposed(by: disposeBag)
+
+        // 완료 버튼 → 편집모드 OFF + 선택 초기화
+        input.doneButtonTapped
+            .subscribe(onNext: { [weak self] in
+                self?.isEditingRelay.accept(false)
+                self?.selectedIDsRelay.accept([])
+            })
+            .disposed(by: disposeBag)
+
+        // 삭제 버튼 → 선택된 항목 삭제
+        input.deleteButtonTapped
+            .subscribe(onNext: { [weak self] in
+                guard let self else { return }
+                let selected = self.selectedIDsRelay.value
+                let remaining = self.allMoviesRelay.value.filter { !selected.contains(Int($0.id)) }
+                selected.forEach { CoreDataManager.shared.deleteFavorite(id: $0) }
+                self.allMoviesRelay.accept(remaining)
+                self.selectedIDsRelay.accept([])
+            })
+            .disposed(by: disposeBag)
+
+        // 셀 선택
+        input.itemSelected
+            .withLatestFrom(Observable.combineLatest(allMoviesRelay, isEditingRelay)) { indexPath, pair in
+                let (movies, isEditing) = pair
+                return (movie: movies[indexPath.item], isEditing: isEditing)
+            }
+            .subscribe(onNext: { [weak self] result in
+                guard let self else { return }
+                
+                if result.isEditing {
+                    // 편집 모드일 때는 선택 상태만 갱신
+                    var selected = self.selectedIDsRelay.value
+                    selected.insert(Int(result.movie.id))
+                    self.selectedIDsRelay.accept(selected)
+                } else {
+                    // 편집 모드 아닐 때는 상세 화면 전환
+                    self.selectedMovieRelay.accept(result.movie)
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // 셀 선택 해제
+        input.itemDeselected
+            .subscribe(onNext: { [weak self] indexPath in
+                guard let self else { return }
+                let movie = self.allMoviesRelay.value[indexPath.item]
+                var selected = self.selectedIDsRelay.value
+                selected.remove(Int(movie.id))
+                self.selectedIDsRelay.accept(selected)
+            })
+            .disposed(by: disposeBag)
+
         return Output(
-            movies: allMovies.asDriver(),
+            movies: allMoviesRelay.asDriver(),
             isEditing: isEditingRelay.asDriver(),
-            selectedIDs: selectedIDsRelay.asDriver()
+            selectedIDs: selectedIDsRelay.asDriver(),
+            selectedMovie: selectedMovieRelay.asSignal()
         )
     }
-    
-    func fetchFavorites() {
+
+    private func fetchFavorites() {
         let favorites = CoreDataManager.shared.fetchFavorites()
-        allMovies.accept(favorites)
-    }
-    
-    func deleteFavorite(_ movie: FavoriteMovie) {
-        CoreDataManager.shared.deleteFavorite(id: Int(movie.id))
-        fetchFavorites() // 삭제 후 목록 다시 불러오기
+        allMoviesRelay.accept(favorites)
     }
 }
