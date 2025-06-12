@@ -25,6 +25,7 @@ class MyNetflixViewModel {
         let isEditing: Driver<Bool>
         let selectedIDs: Driver<Set<Int>>
         let selectedMovie: Signal<FavoriteMovie>
+        let showDeleteAlert: Signal<Void>
     }
 
     // MARK: - State
@@ -32,7 +33,7 @@ class MyNetflixViewModel {
     private let isEditingRelay = BehaviorRelay<Bool>(value: false)
     private let selectedIDsRelay = BehaviorRelay<Set<Int>>(value: [])
     private let selectedMovieRelay = PublishRelay<FavoriteMovie>()
-
+    private let showDeleteAlertRelay = PublishRelay<Void>()
 
     private let disposeBag = DisposeBag()
     
@@ -63,15 +64,10 @@ class MyNetflixViewModel {
         // 삭제 버튼 → 선택된 항목 삭제
         input.deleteButtonTapped
             .subscribe(onNext: { [weak self] in
-                guard let self else { return }
-                let selected = self.selectedIDsRelay.value
-                let remaining = self.allMoviesRelay.value.filter { !selected.contains(Int($0.id)) }
-                selected.forEach { CoreDataManager.shared.deleteFavorite(id: $0) }
-                self.allMoviesRelay.accept(remaining)
-                self.selectedIDsRelay.accept([])
+                self?.showDeleteAlertRelay.accept(())
             })
             .disposed(by: disposeBag)
-
+        
         // 셀 선택
         input.itemSelected
             .withLatestFrom(Observable.combineLatest(allMoviesRelay, isEditingRelay)) { indexPath, pair in
@@ -103,17 +99,26 @@ class MyNetflixViewModel {
                 self.selectedIDsRelay.accept(selected)
             })
             .disposed(by: disposeBag)
-
+        
         return Output(
             movies: allMoviesRelay.asDriver(),
             isEditing: isEditingRelay.asDriver(),
             selectedIDs: selectedIDsRelay.asDriver(),
-            selectedMovie: selectedMovieRelay.asSignal()
+            selectedMovie: selectedMovieRelay.asSignal(),
+            showDeleteAlert: showDeleteAlertRelay.asSignal()
         )
     }
 
     private func fetchFavorites() {
         let favorites = CoreDataManager.shared.fetchFavorites()
         allMoviesRelay.accept(favorites)
+    }
+    
+    func performDeletion() {
+        let selected = selectedIDsRelay.value
+        let remaining = allMoviesRelay.value.filter { !selected.contains(Int($0.id)) }
+        selected.forEach { CoreDataManager.shared.deleteFavorite(id: $0) }
+        allMoviesRelay.accept(remaining)
+        selectedIDsRelay.accept([])
     }
 }

@@ -185,7 +185,13 @@ class MyNetflixViewController: BaseViewController {
                 }
             })
             .disposed(by: disposeBag)
-        
+       
+        output.showDeleteAlert
+            .emit(onNext: { [weak self] in
+                self?.showDeleteConfirmationAlert()
+            })
+            .disposed(by: disposeBag)
+
         output.selectedMovie
             .emit(onNext: { [weak self] movie in
                 self?.navigateToDetail(for: movie)
@@ -193,6 +199,22 @@ class MyNetflixViewController: BaseViewController {
             .disposed(by: disposeBag)
         
     }
+    
+    private func showDeleteConfirmationAlert() {
+        let alert = UIAlertController(
+            title: "정말 삭제하시겠어요?",
+            message: "선택한 영화들이 삭제됩니다.",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive, handler: { [weak self] _ in
+            self?.viewModel.performDeletion()
+        }))
+
+        present(alert, animated: true, completion: nil)
+    }
+
     
     private func navigateToDetail(for movie: FavoriteMovie) {
         let model = Movie(
