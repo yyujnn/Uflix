@@ -106,24 +106,20 @@ class DetailViewController: UIViewController {
         
         moreButton.isHidden = !overviewLabel.isTruncated
     }
-
-    @objc private func didTapLike() {
-        viewModel.toggleFavorite()
-    }
-
+    
     @objc private func toggleOverview() {
         isExpanded.toggle()
         overviewLabel.numberOfLines = isExpanded ? 0 : 3
         moreButton.setTitle(isExpanded ? "간략히" : "더보기", for: .normal)
     }
     
-    private func updateLikeButton(isFavorite: Bool) {
+    private func updateLikeButton(imageName: String) {
         UIView.animate(withDuration: 0.15, animations: {
             self.likeButton.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }) { _ in
             var config = self.likeButton.configuration
             config?.image = UIImage(
-                systemName: isFavorite ? "checkmark" : "plus",
+                systemName: imageName,
                 withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
             )
             self.likeButton.configuration = config
@@ -133,21 +129,26 @@ class DetailViewController: UIViewController {
             }
         }
     }
-
+    
     private func bind() {
-        viewModel.movieDetail
+        let input = DetailViewModel.Input(
+            toggleFavoriteTapped: likeButton.rx.tap.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.movieDetail
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] movie in
-                self?.configure(movie: movie)
+            .bind(onNext: { [weak self] in self?.configure(movie: $0) })
+            .disposed(by: disposeBag)
+        
+        output.likeButtonState
+            .observe(on: MainScheduler.instance)
+            .bind(onNext: { [weak self] state in
+                self?.updateLikeButton(imageName: state.imageName)
             }).disposed(by: disposeBag)
         
-        viewModel.isFavorite
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] isFav in
-                self?.updateLikeButton(isFavorite: isFav)
-            }).disposed(by: disposeBag)
-        
-        viewModel.trailerKey
+        output.trailerKey
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] key in
                 self?.fallbackImageView.isHidden = true
@@ -158,19 +159,17 @@ class DetailViewController: UIViewController {
                 self.playerView.isHidden = true
                 self.fallbackImageView.isHidden = false
                 self.noVideoLabel.isHidden = false
-        
                 if let url = self.fallbackImageURL {
                     self.fallbackImageView.kf.setImage(with: url) { _ in
                         self.fallbackImageView.alpha = 0.6
                     }
                 }
             }).disposed(by: disposeBag)
-
         
-        viewModel.error
+        output.error
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { error in
-                print("error: \(error.localizedDescription)")
+                print("❗️Error: \(error.localizedDescription)")
             }).disposed(by: disposeBag)
     }
     
@@ -276,8 +275,7 @@ class DetailViewController: UIViewController {
             $0.width.height.equalTo(60)
         }
         
-        likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
-        
+
         buttonStackView.addArrangedSubview(likeButton)
         buttonStackView.addArrangedSubview(shareButton)
     }
