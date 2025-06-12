@@ -225,6 +225,7 @@ class MyNetflixViewController: BaseViewController {
         )
         let detailVM = DetailViewModel(movie: model)
         let detailVC = DetailViewController(viewModel: detailVM)
+        detailVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
 }

@@ -169,6 +169,7 @@ extension MainViewController: UICollectionViewDelegate {
         
         let detailViewModel = DetailViewModel(movie: selectedMovie)
         let detailVC = DetailViewController(viewModel: detailViewModel)
+        detailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
