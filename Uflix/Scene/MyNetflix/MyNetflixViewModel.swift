@@ -120,5 +120,6 @@ class MyNetflixViewModel {
         selected.forEach { CoreDataManager.shared.deleteFavorite(id: $0) }
         allMoviesRelay.accept(remaining)
         selectedIDsRelay.accept([])
+        isEditingRelay.accept(false)
     }
 }
