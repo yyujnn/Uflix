@@ -53,6 +53,8 @@ extension CoreDataManager {
     
     func fetchFavorites() -> [FavoriteMovie] {
         let request: NSFetchRequest<FavoriteMovie> = FavoriteMovie.fetchRequest()
+        let sort = NSSortDescriptor(key: "savedDate", ascending: false)
+            request.sortDescriptors = [sort]
         do {
             return try context.fetch(request)
         } catch {
