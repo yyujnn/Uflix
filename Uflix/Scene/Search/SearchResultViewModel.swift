@@ -13,7 +13,10 @@ class SearchResultViewModel {
     let results = BehaviorRelay<[Movie]>(value: [])
     private let disposeBag = DisposeBag()
     
+    let query: String
+    
     init(query: String) {
+        self.query = query
         fetchMovies(query: query)
     }
     

@@ -13,6 +13,17 @@ import SnapKit
 class SearchResultViewController: UIViewController {
     // TODO: SearchBar
     private let viewModel: SearchResultViewModel
+    private let searchBar: UISearchBar = {
+        let bar = UISearchBar()
+        bar.isUserInteractionEnabled = false
+        bar.searchBarStyle = .minimal
+        bar.barStyle = .black
+        bar.tintColor = .white
+        bar.searchTextField.textColor = .white
+        bar.searchTextField.backgroundColor = .darkGray
+        return bar
+    }()
+
     private let resultView = SearchResultView()
     private let disposeBag = DisposeBag()
     
@@ -28,6 +39,7 @@ class SearchResultViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         setupUI()
         bind()
     }
@@ -35,6 +47,15 @@ class SearchResultViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    private func setupNavigationBar() {
+        searchBar.text = viewModel.query
+        navigationItem.titleView = searchBar
+
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
     }
     
     private func setupUI() {
