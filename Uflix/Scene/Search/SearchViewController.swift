@@ -39,6 +39,11 @@ class SearchViewController: BaseViewController {
         bindUI()
     }
     
+    func focusSearchBar(with keyword: String) {
+        searchBar.text = keyword
+        searchBar.becomeFirstResponder()
+    }
+    
     private func bindViewModel() {
         let input = SearchViewModel.Input(
             query: searchBar.rx.text.orEmpty.asObservable(),

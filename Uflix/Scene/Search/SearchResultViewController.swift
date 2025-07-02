@@ -15,7 +15,7 @@ class SearchResultViewController: UIViewController {
     private let viewModel: SearchResultViewModel
     private let searchBar: UISearchBar = {
         let bar = UISearchBar()
-        bar.isUserInteractionEnabled = false
+        bar.isUserInteractionEnabled = true
         bar.searchBarStyle = .minimal
         bar.barStyle = .black
         bar.tintColor = .white
@@ -42,6 +42,7 @@ class SearchResultViewController: UIViewController {
         setupNavigationBar()
         setupUI()
         bind()
+        setupSearchBarTapAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,6 +50,22 @@ class SearchResultViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    private func setupSearchBarTapAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(searchBarTapped))
+        searchBar.searchTextField.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func searchBarTapped() {
+        if let searchVC = navigationController?.viewControllers.first(where: { $0 is SearchViewController }) as? SearchViewController {
+            searchVC.focusSearchBar(with: viewModel.query)
+            navigationController?.popToViewController(searchVC, animated: true)
+        } else {
+            let newSearchVC = SearchViewController()
+            newSearchVC.focusSearchBar(with: viewModel.query)
+            navigationController?.pushViewController(newSearchVC, animated: true)
+        }
+    }
+
     private func setupNavigationBar() {
         searchBar.text = viewModel.query
         navigationItem.titleView = searchBar
