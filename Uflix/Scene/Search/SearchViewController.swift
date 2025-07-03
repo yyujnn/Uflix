@@ -16,7 +16,8 @@ class SearchViewController: BaseViewController {
     private var output: SearchViewModel.Output?
     private let disposeBag = DisposeBag()
     private var cellBindingBag = DisposeBag()
-    
+    private let clearConfirmed = PublishRelay<Void>() // 전체 삭제 확정 시 전달용
+
     private let searchBar = UISearchBar()
     private let tableView = UITableView()
     private let headerLabel = UILabel()
@@ -39,10 +40,16 @@ class SearchViewController: BaseViewController {
         bindUI()
     }
     
+    func focusSearchBar(with keyword: String) {
+        searchBar.text = keyword
+        searchBar.becomeFirstResponder()
+    }
+    
+    // MARK: - Bind
     private func bindViewModel() {
         let input = SearchViewModel.Input(
             query: searchBar.rx.text.orEmpty.asObservable(),
-            clearAllTapped: clearButton.rx.tap.asObservable(),
+            clearAllTapped: clearConfirmed.asObservable(),
             selectedKeyword: tableView.rx.modelSelected(String.self).asObservable())
         
         output = viewModel.transform(input: input)
@@ -52,8 +59,7 @@ class SearchViewController: BaseViewController {
                 self?.navigateToResult(keyword: keyword)
             }).disposed(by: disposeBag)
     }
-    
-    // MARK: - Bind
+
     private func bindUI() {
         tapGesture.rx.event
             .bind(onNext: { [weak self] _ in
@@ -67,6 +73,12 @@ class SearchViewController: BaseViewController {
                 self?.mode.accept(newMode)
             }).disposed(by: disposeBag)
         
+        clearButton.rx.tap
+            .bind(onNext: { [weak self] in
+                self?.showClearConfirmationAlert()
+            })
+            .disposed(by: disposeBag)
+    
         mode
             .distinctUntilChanged()
             .subscribe(onNext: { [weak self] newMode in
@@ -78,6 +90,8 @@ class SearchViewController: BaseViewController {
     private func bindTableView(for mode: SearchMode) {
         tableView.dataSource = nil
         tableView.delegate = nil
+        tableView.keyboardDismissMode = .onDrag
+
         cellBindingBag = DisposeBag()
         
         switch mode {
@@ -99,11 +113,25 @@ class SearchViewController: BaseViewController {
                 }.disposed(by: cellBindingBag)
         }
     }
-    
+
     private func navigateToResult(keyword: String) {
         let resultVC = SearchResultViewController(keyword: keyword)
         navigationController?.pushViewController(resultVC, animated: true)
     }
+    
+    private func showClearConfirmationAlert() {
+        let alert = UIAlertController(
+            title: "최근 검색어 삭제",
+            message: "최근 검색어를 모두 삭제하시겠어요?",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive, handler: { [weak self] _ in
+            self?.clearConfirmed.accept(())
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+
 
     private func updateView(for mode: SearchMode) {
         tableView.tableHeaderView = (mode == .recent) ? headerView : nil

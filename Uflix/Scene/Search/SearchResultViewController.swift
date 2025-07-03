@@ -13,6 +13,18 @@ import SnapKit
 class SearchResultViewController: UIViewController {
     // TODO: SearchBar
     private let viewModel: SearchResultViewModel
+    private let searchBar: UISearchBar = {
+        let bar = UISearchBar()
+        bar.isUserInteractionEnabled = true
+        bar.searchBarStyle = .minimal
+        bar.barStyle = .black
+        bar.tintColor = .white
+        bar.searchTextField.textColor = .white
+        bar.searchTextField.backgroundColor = .darkGray
+        bar.searchTextField.clearButtonMode = .never
+        return bar
+    }()
+
     private let resultView = SearchResultView()
     private let disposeBag = DisposeBag()
     
@@ -28,13 +40,40 @@ class SearchResultViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         setupUI()
         bind()
+        setupSearchBarTapAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    private func setupSearchBarTapAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(searchBarTapped))
+        searchBar.searchTextField.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func searchBarTapped() {
+        if let searchVC = navigationController?.viewControllers.first(where: { $0 is SearchViewController }) as? SearchViewController {
+            searchVC.focusSearchBar(with: viewModel.query)
+            navigationController?.popToViewController(searchVC, animated: true)
+        } else {
+            let newSearchVC = SearchViewController()
+            newSearchVC.focusSearchBar(with: viewModel.query)
+            navigationController?.pushViewController(newSearchVC, animated: true)
+        }
+    }
+
+    private func setupNavigationBar() {
+        searchBar.text = viewModel.query
+        navigationItem.titleView = searchBar
+
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
     }
     
     private func setupUI() {
@@ -55,6 +94,13 @@ class SearchResultViewController: UIViewController {
             )) {_, movie, cell in
                 cell.configure(with: movie)
             }.disposed(by: disposeBag)
+        
+        viewModel.results
+            .map { $0.isEmpty }
+            .bind(onNext: { [weak self] isEmpty in
+                self?.resultView.setEmptyState(isEmpty: isEmpty)
+            })
+            .disposed(by: disposeBag)
         
         resultView.collectionView.rx.modelSelected(Movie.self)
             .subscribe(onNext: { movie in
