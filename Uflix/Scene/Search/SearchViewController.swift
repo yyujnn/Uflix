@@ -83,6 +83,8 @@ class SearchViewController: BaseViewController {
     private func bindTableView(for mode: SearchMode) {
         tableView.dataSource = nil
         tableView.delegate = nil
+        tableView.keyboardDismissMode = .onDrag
+
         cellBindingBag = DisposeBag()
         
         switch mode {

@@ -10,7 +10,6 @@ import SnapKit
 
 final class SearchResultView: UIView {
 
-    // 외부에서 접근 가능한 collectionView
     let collectionView: UICollectionView = {
         let layout = UICollectionViewCompositionalLayout { _, _ in
             let itemSize = NSCollectionLayoutSize(
@@ -44,6 +43,16 @@ final class SearchResultView: UIView {
         cv.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.id)
         return cv
     }()
+    
+    private let emptyLabel: UILabel = {
+       let label = UILabel()
+        label.text = "검색 결과가 없습니다."
+        label.textColor = UIColor.AppColor.textSecondary
+        label.font = .systemFont(ofSize: 16)
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,9 +65,19 @@ final class SearchResultView: UIView {
 
     private func setupUI() {
         addSubview(collectionView)
-
+        addSubview(emptyLabel)
+        
         collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
+        emptyLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+    }
+    
+    // 외부에서 보여줄 메서드
+    func setEmptyState(isEmpty: Bool) {
+        emptyLabel.isHidden = !isEmpty
     }
 }

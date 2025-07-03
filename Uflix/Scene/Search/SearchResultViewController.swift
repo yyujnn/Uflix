@@ -94,6 +94,13 @@ class SearchResultViewController: UIViewController {
                 cell.configure(with: movie)
             }.disposed(by: disposeBag)
         
+        viewModel.results
+            .map { $0.isEmpty }
+            .bind(onNext: { [weak self] isEmpty in
+                self?.resultView.setEmptyState(isEmpty: isEmpty)
+            })
+            .disposed(by: disposeBag)
+        
         resultView.collectionView.rx.modelSelected(Movie.self)
             .subscribe(onNext: { movie in
                 let detailViewModel = DetailViewModel(movie: movie)
