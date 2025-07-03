@@ -21,6 +21,7 @@ class SearchResultViewController: UIViewController {
         bar.tintColor = .white
         bar.searchTextField.textColor = .white
         bar.searchTextField.backgroundColor = .darkGray
+        bar.searchTextField.clearButtonMode = .never
         return bar
     }()
 
