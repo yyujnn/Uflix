@@ -11,7 +11,7 @@ import YouTubeiOSPlayerHelper
 import RxSwift
 import Kingfisher
 
-class DetailViewController: UIViewController {
+class DetailViewController: BaseViewController {
     private let viewModel: DetailViewModel
     private let disposeBag = DisposeBag()
     
