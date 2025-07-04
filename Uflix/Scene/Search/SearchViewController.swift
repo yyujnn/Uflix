@@ -85,6 +85,12 @@ class SearchViewController: BaseViewController {
                 self?.updateView(for: newMode)
                 self?.bindTableView(for: newMode)
             }).disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .bind(onNext: { [weak self] indexPath in
+                self?.tableView.deselectRow(at: indexPath, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func bindTableView(for mode: SearchMode) {
