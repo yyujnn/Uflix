@@ -117,7 +117,7 @@ class DetailViewModel {
                 movies.forEach { movie in
                     print("\(movie.title ?? "제목 없음")")
                 }
-                self?.recommendedMoviesRelay.accept(movies)
+                self?.recommendedMoviesRelay.accept(Array(movies.prefix(10)))
             }, onError:  { [weak self] error in
                 print("❌ 추천 영화 가져오기 실패:", error.localizedDescription)
                 self?.errorSubject.onNext(error)
