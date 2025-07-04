@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F32FDE1F2E17947300B80BED /* RecommendedMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32FDE1E2E17947300B80BED /* RecommendedMovieCell.swift */; };
 		F33B71372D89B66200A49099 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B71362D89B66200A49099 /* AppDelegate.swift */; };
 		F33B713B2D89B66200A49099 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33B713A2D89B66200A49099 /* MainViewController.swift */; };
 		F33B71402D89B66400A49099 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F33B713F2D89B66400A49099 /* Assets.xcassets */; };
@@ -48,6 +49,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F32FDE1E2E17947300B80BED /* RecommendedMovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedMovieCell.swift; sourceTree = "<group>"; };
 		F33B71332D89B66200A49099 /* Uflix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uflix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F33B71362D89B66200A49099 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F33B713A2D89B66200A49099 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				F3FC48662DD9F3CC0040DF9D /* DetailViewController.swift */,
 				F3FC48642DD9F2F20040DF9D /* DetailViewModel.swift */,
 				F33B71AC2D919D0600A49099 /* YoutubeViewController.swift */,
+				F32FDE1E2E17947300B80BED /* RecommendedMovieCell.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				F33B71AF2D919EDE00A49099 /* SectionHeaderView.swift in Sources */,
 				F33B71812D903DBD00A49099 /* Movie.swift in Sources */,
 				F33B71832D903DC700A49099 /* Video.swift in Sources */,
+				F32FDE1F2E17947300B80BED /* RecommendedMovieCell.swift in Sources */,
 				F3FC48952DEAD5FC0040DF9D /* SuggestCell.swift in Sources */,
 				F3FC48652DD9F2F20040DF9D /* DetailViewModel.swift in Sources */,
 				F3FC48472DD332400040DF9D /* MainViewModel.swift in Sources */,

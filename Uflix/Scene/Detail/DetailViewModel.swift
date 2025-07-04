@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 class DetailViewModel {
     struct Input {
@@ -19,6 +20,7 @@ class DetailViewModel {
         let trailerKey: Observable<String>
         let likeButtonState: Observable<LikeButtonState>
         let error: Observable<Error>
+        let recommendedMovies: Observable<[Movie]>
     }
     
     private let disposeBag = DisposeBag()
@@ -28,6 +30,7 @@ class DetailViewModel {
     let trailerKeySubject = ReplaySubject<String>.create(bufferSize: 1)
     let errorSubject = PublishSubject<Error>()
     let isFavoriteSubject = BehaviorSubject<Bool>(value: false)
+    let recommendedMoviesRelay = BehaviorRelay<[Movie]>(value: [])
     
     
     init(movie: Movie) {
@@ -35,6 +38,7 @@ class DetailViewModel {
         self.movieDetailSubject = BehaviorSubject(value: movie)
         checkFavoriteStatus()
         fetchTrailerKey()
+        fetchRecommendations()
     }
 
     func transform(input: Input) -> Output {
@@ -53,7 +57,8 @@ class DetailViewModel {
             isFavorite: isFavoriteSubject.asObservable(),
             trailerKey: trailerKeySubject.asObservable(),
             likeButtonState: likeButtonState,
-            error: errorSubject.asObservable()
+            error: errorSubject.asObservable(),
+            recommendedMovies: recommendedMoviesRelay.asObservable()
         )
     }
     
@@ -101,6 +106,20 @@ class DetailViewModel {
                 self?.trailerKeySubject.onNext(key)
             }, onFailure: { [weak self] error in
                 self?.trailerKeySubject.onError(error)
+                self?.errorSubject.onNext(error)
+            }).disposed(by: disposeBag)
+    }
+    
+    func fetchRecommendations() {
+        MovieService.fetchRecommendations(for: movie.id)
+            .subscribe(onNext: { [weak self] movies in
+                print("✅ 추천 영화 목록:")
+                movies.forEach { movie in
+                    print("\(movie.title ?? "제목 없음")")
+                }
+                self?.recommendedMoviesRelay.accept(Array(movies.prefix(10)))
+            }, onError:  { [weak self] error in
+                print("❌ 추천 영화 가져오기 실패:", error.localizedDescription)
                 self?.errorSubject.onNext(error)
             }).disposed(by: disposeBag)
     }

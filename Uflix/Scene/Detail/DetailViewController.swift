@@ -11,7 +11,7 @@ import YouTubeiOSPlayerHelper
 import RxSwift
 import Kingfisher
 
-class DetailViewController: UIViewController {
+class DetailViewController: BaseViewController {
     private let viewModel: DetailViewModel
     private let disposeBag = DisposeBag()
     
@@ -75,6 +75,28 @@ class DetailViewController: UIViewController {
         return stack
     }()
     
+    private let recommendedTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "추천 콘텐츠"
+        label.font = .boldSystemFont(ofSize: 18)
+        label.textColor = UIColor.AppColor.textPrimary
+        return label
+    }()
+    
+    private let recommendedCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.itemSize = CGSize(width: 100, height: 170)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.AppColor.background
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(RecommendedMovieCell.self, forCellWithReuseIdentifier: RecommendedMovieCell.identifier)
+        return collectionView
+    }()
+
     init(viewModel: DetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -88,6 +110,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         bind()
+        bindRecommendedMovies()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -172,6 +195,23 @@ class DetailViewController: UIViewController {
                 print("❗️Error: \(error.localizedDescription)")
             }).disposed(by: disposeBag)
     }
+
+    private func bindRecommendedMovies() {
+        viewModel.recommendedMoviesRelay
+            .bind(to: recommendedCollectionView.rx.items(
+                cellIdentifier: RecommendedMovieCell.identifier,
+                cellType: RecommendedMovieCell.self)) { _, movie, cell in
+                    cell.configure(with: movie)
+            }
+            .disposed(by: disposeBag)
+        
+        recommendedCollectionView.rx.modelSelected(Movie.self)
+            .subscribe(onNext: { [weak self] movie in
+                let detailVM = DetailViewModel(movie: movie)
+                let detailVC = DetailViewController(viewModel: detailVM)
+                self?.navigationController?.pushViewController(detailVC, animated: true)
+            }).disposed(by: disposeBag)
+    }
     
     private func setupUI() {
         view.backgroundColor = UIColor.AppColor.background
@@ -187,6 +227,7 @@ class DetailViewController: UIViewController {
         setupVideoSection()
         setupStackView()
         setupButtons()
+        setupRecommendedSection()
     }
     
     private func setupVideoSection() {
@@ -268,16 +309,31 @@ class DetailViewController: UIViewController {
         buttonStackView.snp.makeConstraints {
             $0.top.equalTo(stackView.snp.bottom).offset(16)
             $0.left.equalToSuperview().inset(8)
-            $0.bottom.equalToSuperview().inset(20)
         }
         
         likeButton.snp.makeConstraints {
             $0.width.height.equalTo(60)
         }
-        
 
         buttonStackView.addArrangedSubview(likeButton)
         buttonStackView.addArrangedSubview(shareButton)
+    }
+    
+    private func setupRecommendedSection() {
+        contentView.addSubview(recommendedTitleLabel)
+        contentView.addSubview(recommendedCollectionView)
+        
+        recommendedTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(buttonStackView.snp.bottom).offset(32)
+            $0.leading.equalToSuperview().inset(20)
+        }
+        
+        recommendedCollectionView.snp.makeConstraints {
+            $0.top.equalTo(recommendedTitleLabel.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(170)
+            $0.bottom.equalToSuperview().inset(20) // 중요: 전체 scrollView contentView 끝 지정
+        }
     }
 
     private func configure(movie: Movie) {
