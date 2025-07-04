@@ -97,14 +97,6 @@ class DetailViewController: UIViewController {
         return collectionView
     }()
 
-    private let dummyMovies: [Movie] = [
-        Movie(id: 1, title: "인셉션", posterPath: "/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg", overview: nil),
-        Movie(id: 2, title: "인터스텔라", posterPath: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg", overview: nil),
-        Movie(id: 3, title: "다크 나이트", posterPath: "/1hRoyzDtpgMU7Dz4JF22RANzQO7.jpg", overview: nil),
-        Movie(id: 4, title: "테넷", posterPath: "/k68nPLbIST6NP96JmTxmZijEvCA.jpg", overview: nil)
-    ]
-
-    
     init(viewModel: DetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -118,7 +110,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         bind()
-        bindDummyRecommendedMovies()
+        bindRecommendedMovies()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -201,6 +193,23 @@ class DetailViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { error in
                 print("❗️Error: \(error.localizedDescription)")
+            }).disposed(by: disposeBag)
+    }
+
+    private func bindRecommendedMovies() {
+        viewModel.recommendedMoviesRelay
+            .bind(to: recommendedCollectionView.rx.items(
+                cellIdentifier: RecommendedMovieCell.identifier,
+                cellType: RecommendedMovieCell.self)) { _, movie, cell in
+                    cell.configure(with: movie)
+            }
+            .disposed(by: disposeBag)
+        
+        recommendedCollectionView.rx.modelSelected(Movie.self)
+            .subscribe(onNext: { [weak self] movie in
+                let detailVM = DetailViewModel(movie: movie)
+                let detailVC = DetailViewController(viewModel: detailVM)
+                self?.navigationController?.pushViewController(detailVC, animated: true)
             }).disposed(by: disposeBag)
     }
     
@@ -326,17 +335,6 @@ class DetailViewController: UIViewController {
             $0.bottom.equalToSuperview().inset(20) // 중요: 전체 scrollView contentView 끝 지정
         }
     }
-    
-    private func bindDummyRecommendedMovies() {
-        Observable.just(dummyMovies)
-            .bind(to: recommendedCollectionView.rx.items(
-                cellIdentifier: RecommendedMovieCell.identifier,
-                cellType: RecommendedMovieCell.self)) { _, movie, cell in
-                    cell.configure(with: movie)
-            }
-            .disposed(by: disposeBag)
-    }
-
 
     private func configure(movie: Movie) {
         titleLabel.text = movie.title
