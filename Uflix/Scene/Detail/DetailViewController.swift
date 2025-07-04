@@ -14,6 +14,7 @@ import Kingfisher
 class DetailViewController: BaseViewController {
     private let viewModel: DetailViewModel
     private let disposeBag = DisposeBag()
+    private var isFirstUpdate = true
     
     private var isExpanded = false
     private var didCheckOverviewLines = false
@@ -136,22 +137,30 @@ class DetailViewController: BaseViewController {
         moreButton.setTitle(isExpanded ? "간략히" : "더보기", for: .normal)
     }
     
-    private func updateLikeButton(imageName: String) {
+    private func updateLikeButtonWithAnimation(imageName: String) {
         UIView.animate(withDuration: 0.15, animations: {
             self.likeButton.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }) { _ in
-            var config = self.likeButton.configuration
-            config?.image = UIImage(
-                systemName: imageName,
-                withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-            )
-            self.likeButton.configuration = config
-
+            self.setLikeButtonImage(imageName)
             UIView.animate(withDuration: 0.15) {
                 self.likeButton.transform = .identity
             }
         }
     }
+
+    private func updateLikeButtonWithoutAnimation(imageName: String) {
+        self.setLikeButtonImage(imageName)
+    }
+
+    private func setLikeButtonImage(_ imageName: String) {
+        var config = self.likeButton.configuration
+        config?.image = UIImage(
+            systemName: imageName,
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        )
+        self.likeButton.configuration = config
+    }
+
     
     private func bind() {
         let input = DetailViewModel.Input(
@@ -168,8 +177,18 @@ class DetailViewController: BaseViewController {
         output.likeButtonState
             .observe(on: MainScheduler.instance)
             .bind(onNext: { [weak self] state in
-                self?.updateLikeButton(imageName: state.imageName)
-            }).disposed(by: disposeBag)
+                guard let self = self else { return }
+
+                if self.isFirstUpdate {
+                    // 처음 들어왔을 때는 애니메이션 없이 실행
+                    self.updateLikeButtonWithoutAnimation(imageName: state.imageName)
+                    self.isFirstUpdate = false
+                } else {
+                    // 이후엔 애니메이션 실행
+                    self.updateLikeButtonWithAnimation(imageName: state.imageName)
+                }
+            })
+            .disposed(by: disposeBag)
         
         output.trailerKey
             .observe(on: MainScheduler.instance)
