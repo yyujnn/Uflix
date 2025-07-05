@@ -226,9 +226,17 @@ class DetailViewController: BaseViewController {
         
         recommendedCollectionView.rx.modelSelected(Movie.self)
             .subscribe(onNext: { [weak self] movie in
-                let detailVM = DetailViewModel(movie: movie)
-                let detailVC = DetailViewController(viewModel: detailVM)
-                self?.navigationController?.pushViewController(detailVC, animated: true)
+                guard let self = self,
+                      let nav = self.navigationController else { return }
+                
+                let newVM = DetailViewModel(movie: movie)
+                let newDetailVC = DetailViewController(viewModel: newVM)
+                
+                // 현재 navigation stack에서 마지막 ViewController 제거하고, 새로 넣기
+                var stack = nav.viewControllers
+                stack.removeLast()
+                stack.append(newDetailVC)
+                nav.setViewControllers(stack, animated: true)
             }).disposed(by: disposeBag)
     }
     
