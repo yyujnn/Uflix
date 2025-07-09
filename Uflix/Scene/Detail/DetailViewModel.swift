@@ -24,7 +24,7 @@ class DetailViewModel {
     }
     
     private let disposeBag = DisposeBag()
-    private let movie: Movie
+    let movie: Movie
     
     let movieDetailSubject: BehaviorSubject<Movie>
     let trailerKeySubject = ReplaySubject<String>.create(bufferSize: 1)

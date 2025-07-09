@@ -66,6 +66,7 @@ class DetailViewController: BaseViewController {
             return attr
         }
         button.configuration = config
+        button.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
         return button
     }()
 
@@ -136,6 +137,20 @@ class DetailViewController: BaseViewController {
         overviewLabel.numberOfLines = isExpanded ? 0 : 3
         moreButton.setTitle(isExpanded ? "간략히" : "더보기", for: .normal)
     }
+    
+    @objc private func shareTapped() {
+        let movie = viewModel.movie
+
+        let title = movie.title ?? "영화"
+        let message = "이 영화 어때요? 👉 \(title)"
+        let link = "https://www.themoviedb.org/movie/\(movie.id)"
+        let items: [Any] = [message, URL(string: link)!]
+
+        let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        activityVC.popoverPresentationController?.sourceView = self.shareButton // iPad 대응
+        present(activityVC, animated: true)
+    }
+
     
     private func updateLikeButtonWithAnimation(imageName: String) {
         UIView.animate(withDuration: 0.15, animations: {
