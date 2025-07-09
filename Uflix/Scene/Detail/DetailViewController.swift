@@ -66,7 +66,6 @@ class DetailViewController: BaseViewController {
             return attr
         }
         button.configuration = config
-        button.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
         return button
     }()
 
@@ -139,15 +138,8 @@ class DetailViewController: BaseViewController {
     }
     
     @objc private func shareTapped() {
-        let movie = viewModel.movie
-
-        let title = movie.title ?? "영화"
-        let message = "이 영화 어때요? 👉 \(title)"
-        let link = "https://www.themoviedb.org/movie/\(movie.id)"
-        let items: [Any] = [message, URL(string: link)!]
-
-        let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        activityVC.popoverPresentationController?.sourceView = self.shareButton // iPad 대응
+        let message = viewModel.makeShareMessage()
+        let activityVC = UIActivityViewController(activityItems: [message], applicationActivities: nil)
         present(activityVC, animated: true)
     }
 
@@ -265,6 +257,8 @@ class DetailViewController: BaseViewController {
             $0.edges.equalToSuperview()
             $0.width.equalTo(scrollView.snp.width)
         }
+        
+        shareButton.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
         
         setupVideoSection()
         setupStackView()

@@ -24,7 +24,7 @@ class DetailViewModel {
     }
     
     private let disposeBag = DisposeBag()
-    let movie: Movie
+    private let movie: Movie
     
     let movieDetailSubject: BehaviorSubject<Movie>
     let trailerKeySubject = ReplaySubject<String>.create(bufferSize: 1)
@@ -40,7 +40,7 @@ class DetailViewModel {
         fetchTrailerKey()
         fetchRecommendations()
     }
-
+    
     func transform(input: Input) -> Output {
         input.toggleFavoriteTapped
             .withLatestFrom(isFavoriteSubject)
@@ -80,6 +80,12 @@ class DetailViewModel {
         
         let all = CoreDataManager.shared.fetchFavorites()
         print("✅ 저장된 찜 목록 개수: \(all.count)")
+    }
+    
+    func makeShareMessage() -> String {
+        let title = movie.title ?? "영화"
+        let link = "https://www.themoviedb.org/movie/\(movie.id)"
+        return "🎬 \(title)\n\n더 알아보기 👉 \(link)"
     }
     
     /// 예고편 영상 key
