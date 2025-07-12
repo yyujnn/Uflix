@@ -128,17 +128,5 @@ xml
 
 - [TMDB Developers](https://developer.themoviedb.org/docs)
 
----
 
-<<<<<<< HEAD
-## 📌 향후 개선 예정
-
-- [ ]  유튜브 API 연동 및 실제 트레일러 영상 재생
-- [ ]  다국어 지원 (Localization)
-- [ ]  다크 모드 대응
-- [ ]  인기 검색어, 검색 자동완성 기능 개선
-
-
-=======
->>>>>>> c106ce7 (docs: README update)
 <br> 
