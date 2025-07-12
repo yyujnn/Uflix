@@ -1,10 +1,9 @@
-# UFlix 🎬  
-**넷플릭스 스타일의 영화 iOS 애플리케이션**
+# Uflix 🎬  
 
-넷플릭스를 오마주한 iOS 영화 앱입니다. 🍿🎬  
-TMDB API 기반으로 인기 영화, 평점 높은 영화, 개봉 예정 영화 등 다양한 정보를 제공하며, 검색 기능, 찜 기능, 추천 콘텐츠 등 실제 OTT 앱에서 사용하는 핵심 기능들을 구현했습니다.
+TMDB API를 활용한 넷플릭스 스타일 iOS 영화 앱 🍿🎬  
+RxSwift & MVVM 아키텍처 기반으로 제작된 개인 프로젝트입니다.  
 
-![Uflix Banner](/Uflix/App/Assets.xcassets/README/UFLIX_banner.png) <!-- 배너 이미지 있으면 삽입 -->
+![Uflix Banner](./images/UFLIX_banner.png) <!-- 배너 이미지 있으면 삽입 -->
 
 <br> 
 
@@ -12,14 +11,27 @@ TMDB API 기반으로 인기 영화, 평점 높은 영화, 개봉 예정 영화 
 
 ## 📱 주요 기능
 
-| 기능 | 설명 |
-|------|------|
-| 🔍 **검색** | 실시간 검색어 추천, 최근 검색어 저장/삭제, 검색 결과 없음 처리 |
-| 🏠 **홈 화면** | 인기 영화 / 평점 높은 영화 / 개봉 예정 영화 표시 (Compositional Layout) |
-| ❤️ **찜 기능** | CoreData 기반 찜한 영화 관리, 편집 모드로 다중 선택 후 삭제 가능 |
-| 🎬 **상세 화면** | 영화 포스터, 제목, 줄거리, 추천 콘텐츠 함께 표시 |
-| ✅ **추천 콘텐츠** | TMDB API 기반 연관 영화 추천, 하단 가로 스크롤 표시 |
-| 🎥 **미디어 재생** | AVPlayerViewController 사용한 영상 재생 기능 구현 예시 포함 |
+### 🏠 홈 화면
+- 인기 영화, 최고 평점 영화, 개봉 예정 영화 섹션 구성
+- Compositional Layout + 수평 스크롤
+- 셀 클릭 시 상세 화면으로 이동
+
+### 🔍 검색
+- 검색어 입력 시 추천 키워드 표시
+- 검색 이력 저장 및 최대 10개까지 유지
+- 검색 결과 없음 처리
+- 검색창 클릭 시 이전 화면 복귀 기능
+
+### 🎞️ 상세 화면
+- 영화 이미지, 설명 표시
+- AVPlayerViewController 사용한 영상 재생 기능
+- 관련 추천 콘텐츠 가로 스크롤
+- 찜 추가 버튼 (CoreData 저장)
+
+### ❤️ 마이 페이지 (찜한 목록)
+- 찜한 영화 리스트 표시
+- 편집 모드 전환 및 다중 선택 삭제
+- CoreData 기반 로컬 저장소 관리
 
 <br> 
 
@@ -27,7 +39,7 @@ TMDB API 기반으로 인기 영화, 평점 높은 영화, 개봉 예정 영화 
 
 ## 🧱 기술 스택
 
-| 구분 | 기술 |
+| Category | Stack |
 |------|------|
 | Language | `Swift` |
 | UI Framework | `UIKit` + `SnapKit` |
@@ -46,16 +58,17 @@ TMDB API 기반으로 인기 영화, 평점 높은 영화, 개봉 예정 영화 
 
 ```bash
 Uflix/
-├── MainViewController.swift          # 홈 화면 (카테고리별 영화 섹션)
-├── SearchViewController.swift        # 검색 화면
-├── SearchResultViewController.swift # 검색 결과
-├── DetailViewController.swift        # 영화 상세 화면
-├── MyNetflixViewController.swift     # 찜한 영화 목록
-├── ViewModels/                       # MVVM 구조에 따른 ViewModel 파일들
-├── Models/                           # Movie, FavoriteMovie 등 도메인 모델
-├── Network/                          # API 호출, MovieService, NetworkManager
-├── Utilities/                        # CoreDataManager, SearchHistoryManager
-└── Resources/                        # Assets, AppColor, Constants 등
+├── App/                # 앱 기본 설정 및 Info
+├── Common/             # 네트워크, CoreData 등 공통 유틸
+├── Model/              # Movie, Video, FavoriteMovie 등 모델
+├── Base/               # 공통 ViewController, TabBar 등
+├── Scene/
+│   ├── Main/           # 홈 화면
+│   ├── Detail/         # 영화 상세 화면
+│   ├── Search/         # 검색 화면
+│   └── MyNetflix/      # 찜한 영화 목록
+├── Config/             # 설정 관련 파일
+└── README.md
 ```
 
 <br> 
@@ -69,7 +82,7 @@ Uflix/
 ```bash
 bash
 코드 복사
-git clone https://github.com/your-username/uflix.git
+git clone https://github.com/your-username/Uflix.git
 
 ```
 
@@ -94,12 +107,10 @@ xml
 
 ## 📸 UI 스크린샷
 
-> 아래는 일부 화면 예시입니다.
-> 
+| 홈 화면 | 상세 화면 | 검색 | 찜한 목록 |
+|:--:|:--:|:--:|:--:|
+| ![home](./images/home.png) | ![detail](./images/detail.png) | ![search](./images/search.png) | ![favorites](./images/favorites.png) |
 
-| 홈 화면 | 상세 화면 | 찜 목록 |
-| --- | --- | --- |
-|  |  |  |
 
 
 <br> 
@@ -108,15 +119,18 @@ xml
 
 ## 👩🏻‍💻 개발자
 
-| 이름 | GitHub |
-| --- | --- |
-| 정유진 | [@yyujnn](https://github.com/yyujnn) |
+- 정유진 ([@github](https://github.com/yyujnn))  
 
 
 <br> 
 
+## 🔗 API
+
+- [TMDB Developers](https://developer.themoviedb.org/docs)
+
 ---
 
+<<<<<<< HEAD
 ## 📌 향후 개선 예정
 
 - [ ]  유튜브 API 연동 및 실제 트레일러 영상 재생
@@ -125,4 +139,6 @@ xml
 - [ ]  인기 검색어, 검색 자동완성 기능 개선
 
 
+=======
+>>>>>>> c106ce7 (docs: README update)
 <br> 
