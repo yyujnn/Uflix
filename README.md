@@ -8,6 +8,16 @@ RxSwift & MVVM 아키텍처 기반으로 제작된 개인 프로젝트입니다.
 <br> 
 
 ---
+## 📌 목차
+
+- [📱 주요 기능](#-주요-기능)
+- [🧱 기술 스택](#-기술-스택)
+- [🚀 실행 방법](#-실행-방법)
+- [📚 Trouble Shooting](https://github.com/yyujnn/Uflix/wiki/Trouble-Shooting)
+
+<br> 
+
+---
 
 ## 📱 주요 기능
 
