@@ -90,25 +90,21 @@ Uflix/
 1. 이 저장소를 클론합니다.
 
 ```bash
-bash
-코드 복사
 git clone https://github.com/your-username/Uflix.git
 
 ```
 
-1. `TMDB_API_KEY`를 설정합니다.
+2. `TMDB_API_KEY`를 설정합니다.
 
 `Info.plist`에 다음 키를 추가해 주세요:
 
 ```xml
-xml
-코드 복사
 <key>TMDB_API_KEY</key>
 <string>YOUR_TMDB_API_KEY</string>
 
 ```
 
-1. 라이브러리 설치 (RxSwift 등은 CocoaPods 또는 Swift Package Manager로 설치되어야 합니다)
+3. 라이브러리 설치 (RxSwift 등은 CocoaPods 또는 Swift Package Manager로 설치되어야 합니다)
 
 
 <br> 
